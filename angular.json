@@ -25,6 +25,7 @@
               }
             ],
             "styles": [
+              
               "src/styles.css"
             ]
           },
@@ -82,11 +83,19 @@
               }
             ],
             "styles": [
-              "src/styles.css"
-            ]
+  "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+  "src/styles.css"
+],
+"scripts": [
+  "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+]
+
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "7435f011-1ba3-4421-918e-048341663243"
   }
 }

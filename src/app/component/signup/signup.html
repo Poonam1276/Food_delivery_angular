@@ -1,0 +1,48 @@
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title text-center mb-4">Create an Account</h4>
+          <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <div class="mb-3">
+              <label for="name" class="form-label">Full Name</label>
+              <input type="text" id="name" class="form-control" placeholder="Enter your full name"
+                     [(ngModel)]="user.name" name="name" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" id="email" class="form-control" placeholder="you@example.com"
+                     [(ngModel)]="user.email" name="email" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input type="text" id="phone" class="form-control" placeholder="e.g. 9876543210"
+                     [(ngModel)]="user.phone" name="phone" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="role" class="form-label">Select Role</label>
+              <select id="role" class="form-select" [(ngModel)]="user.role" name="role" required>
+                <option value="" disabled selected>Select your role</option>
+                <option value="Customer">Customer</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">
+              Register
+            </button>
+          </form>
+
+          <div *ngIf="message" class="alert alert-info mt-3 text-center">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
