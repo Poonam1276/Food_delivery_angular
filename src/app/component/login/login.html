@@ -1,0 +1,33 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title text-center mb-4">Login with OTP</h4>
+
+          <form *ngIf="!otpRequested" (ngSubmit)="requestOtp()" #emailForm="ngForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" class="form-control" placeholder="you@example.com"
+                     [(ngModel)]="email" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100" [disabled]="emailForm.invalid">Request OTP</button>
+          </form>
+
+          <form *ngIf="otpRequested" (ngSubmit)="verifyOtp()" #otpForm="ngForm">
+            <div class="mb-3">
+              <label for="otp" class="form-label">Enter OTP</label>
+              <input type="text" id="otp" class="form-control" placeholder="Enter OTP"
+                     [(ngModel)]="otp" name="otp" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100" [disabled]="otpForm.invalid">Verify OTP</button>
+          </form>
+
+          <div *ngIf="message" class="alert alert-info mt-3 text-center">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

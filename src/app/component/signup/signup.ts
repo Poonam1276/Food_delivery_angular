@@ -8,6 +8,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './signup.html',
+  styleUrls: ['./signup.css']
 })
 export class SignupComponent {
   user = {
@@ -22,19 +23,13 @@ export class SignupComponent {
   constructor(private http: HttpClient) {}
 
   onSubmit() {
-    const apiUrl = 'https://localhost:7004/api/User/Register'; // Replace with your actual API URL
+    const apiUrl = 'https://localhost:7004/api/user/register';
 
     this.http.post(apiUrl, this.user).subscribe({
       next: (response: any) => {
         this.message = response.message || 'Registration successful!';
       },
-      error: (error) => {
-        if (error.status === 409) {
-          this.message = error.error;
-        } else {
-          this.message = 'An error occurred during registration.';
-        }
-      }
+     
     });
   }
 }
