@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './signup.html',
+  styleUrl: './signup.css'
 })
 export class SignupComponent {
   user = {
@@ -19,13 +21,11 @@ export class SignupComponent {
 
   message: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private authService: AuthService) {}
 
   onSubmit() {
-    const apiUrl = 'https://localhost:7004/api/User/Register'; // Replace with your actual API URL
-
-    this.http.post(apiUrl, this.user).subscribe({
-      next: (response: any) => {
+    this.authService.signup(this.user).subscribe({
+      next: (response) => {
         this.message = response.message || 'Registration successful!';
       },
       error: (error) => {
