@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { RouterModule } from '@angular/router';
 
+ 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule,  RouterModule],
   templateUrl: './signup.html',
-  styleUrl: './signup.css'
+  styleUrl: './signup.css',
 })
 export class SignupComponent {
   user = {
@@ -18,11 +20,11 @@ export class SignupComponent {
     phone: '',
     role: ''
   };
-
+ 
   message: string = '';
-
+ 
   constructor(private authService: AuthService) {}
-
+ 
   onSubmit() {
     this.authService.signup(this.user).subscribe({
       next: (response) => {
@@ -38,3 +40,4 @@ export class SignupComponent {
     });
   }
 }
+ 

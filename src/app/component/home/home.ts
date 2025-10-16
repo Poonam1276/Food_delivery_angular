@@ -3,11 +3,14 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MenuService } from '../../services/menu.service';
+import { RouterModule } from '@angular/router';
+import { Navbar } from '../navbar/navbar';
 
+ 
 @Component({
   selector: 'app-home',
+  imports:[FormsModule, CommonModule, RouterModule],
   standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
