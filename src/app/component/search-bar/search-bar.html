@@ -1,0 +1,29 @@
+<div class="container mt-3 mb-3">
+<form class="row g-2" (ngSubmit)="onSearch()">
+<div class="col-md-3">
+<input type="text" class="form-control" name="pinCode" placeholder="Enter Pin Code" [(ngModel)]="pinCode" readonly >
+</div>
+<div class="col-md-2">
+<input type="text" class="form-control" name="city" placeholder="Enter City" [(ngModel)]="city" name="city">
+</div>
+<div class="col-md-2">
+<input type="text" class="form-control" name="Menu item" placeholder="Enter Food Item" [(ngModel)]="menuItem" name="menuItem">
+</div>
+<div class="col-md-2">
+<input type="text" class="form-control" name="Restuarant Name" placeholder="Enter Restaurant Name" [(ngModel)]="restaurant" name="restaurant">
+</div>
+<div class="col-md-2">
+<select class="form-select" [(ngModel)]="category" name="category">
+<option value="">All Categories</option>
+<option value="beverages">Beverages</option>
+<option value="main-course">Main Course</option>
+<option value="desserts">Desserts</option>
+<option value="snacks">Snacks</option>
+<option value="salads">Salads</option>
+</select>
+</div>
+<div class="col-md-1">
+<button type="submit" class="btn w-100" style="background:#f57c00;" (clicl)="onSearch()">Search</button>
+</div>
+</form>
+</div>

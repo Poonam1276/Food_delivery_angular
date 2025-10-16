@@ -1,0 +1,20 @@
+<app-navbar></app-navbar>
+<app-search-bar [pinCode]="pinCode" (search) ="onSearchUpdated($event)"></app-search-bar>
+<div class="container mt-4">
+<div class="row">
+<div class="col-md-4 mb-4" *ngFor="let item of menuItems">
+<div class="card h-100">
+<img [src]="item.foodImage" class="card-img-top" alt="{{item.name}}" height="200">
+<div class="card-body">
+<h5 class="card-title">{{item.name}}</h5>
+<p class="card-text">{{item.description}}</p>
+<p class="card-subtitle">{{item.restaurantName}}</p>
+<p class="card-text"><strong>₹ {{item.price}}</strong></p>
+<button class="btn w-100" style="background:#f57c00;">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+

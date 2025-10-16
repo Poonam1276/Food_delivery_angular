@@ -15,13 +15,14 @@
     <h1 class="title">Find Delicious Food Near You 🍽️</h1>
     <p class="subtitle">Enter your PIN code to explore local restaurants and menus</p>
  
-    <div class="search-bar">
+    <div class="search-bar test-center mt-5">
       <input
         type="text"
+        class="form-control mb-2"
         placeholder="Enter your PIN code"
-       
+       [(ngModel)]="pinCode"
       />
-      <button (click)="searchRestaurants()">Search</button>
+      <button class="btn btn-primary" (click)="goToMenu()">Search</button>
     </div>
   </div>
 </div>
