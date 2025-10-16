@@ -1,49 +1,98 @@
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h4 class="card-title text-center mb-4">Create an Account</h4>
-          <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
-            <div class="mb-3">
-              <label for="name" class="form-label">Full Name</label>
-              <input type="text" id="name" class="form-control" placeholder="Enter your full name"
-                     [(ngModel)]="user.name" name="name" required>
-            </div>
 
-            <div class="mb-3">
-              <label for="email" class="form-label">Email Address</label>
-              <input type="email" id="email" class="form-control" placeholder="you@example.com"
-                     [(ngModel)]="user.email" name="email" required>
-            </div>
-
-            <div class="mb-3">
-              <label for="phone" class="form-label">Phone Number</label>
-              <input type="text" id="phone" class="form-control" placeholder="e.g. 9876543210"
-                     [(ngModel)]="user.phone" name="phone" required>
-            </div>
-
-            <div class="mb-3">
-              <label for="role" class="form-label">Select Role</label>
-              <select id="role" class="form-select" [(ngModel)]="user.role" name="role" required>
-                <option value="" disabled selected>Select your role</option>
-                <option value="Customer">Customer</option>
-                <option value="Restaurant">Restaurant</option>
-                <option value="DeliveryAgent">DeliveryAgent</option>
-              </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100" [disabled]="registerForm.invalid">
-              Register
-            </button>
-          </form>
-
-          <div *ngIf="message" class="alert alert-info mt-3 text-center">
-            {{ message }}
-          </div>
+<div class="signup-page">
+  <!-- Left: Food image -->
+  <div class="signup-left">
+    <img
+      src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1200&q=80"
+      alt="Delicious Food"
+      class="signup-img"
+    />
+  </div>
+ 
+  <!-- Right: Signup form -->
+  <div class="signup-right">
+    <div class="signup-card shadow-lg p-4 rounded-4">
+      <h3 class="text-center text-success fw-bold mb-3">Create Your Account</h3>
+      <p class="text-center text-muted mb-4">
+        Join us and get your favorite food delivered hot & fresh 🍕
+      </p>
+ 
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+        <div class="mb-3">
+          <label for="name" class="form-label fw-semibold">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control rounded-pill"
+            placeholder="Enter your full name"
+            [(ngModel)]="user.name"
+            name="name"
+            required
+          />
         </div>
+ 
+        <div class="mb-3">
+          <label for="email" class="form-label fw-semibold">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control rounded-pill"
+            placeholder="you@example.com"
+            [(ngModel)]="user.email"
+            name="email"
+            required
+          />
+        </div>
+ 
+        <div class="mb-3">
+          <label for="phone" class="form-label fw-semibold">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            class="form-control rounded-pill"
+            placeholder="e.g. 9876543210"
+            [(ngModel)]="user.phone"
+            name="phone"
+            required
+          />
+        </div>
+ 
+        <div class="mb-4">
+          <label for="role" class="form-label fw-semibold">Select Role</label>
+          <select
+            id="role"
+            class="form-select rounded-pill"
+            [(ngModel)]="user.role"
+            name="role"
+            required
+          >
+            <option value="" disabled selected>Select your role</option>
+            <option value="Customer">Customer</option>
+            <option value="DeliveryAgent">Delivery Agent</option>
+            <option value="Restaurant">Restauant</option>
+          </select>
+        </div>
+ 
+        <button
+          type="submit"
+          class="btn btn-success w-100 rounded-pill fw-bold"
+          [disabled]="registerForm.invalid"
+        >
+          Register
+        </button>
+      </form>
+ 
+      <div *ngIf="message" class="alert alert-info mt-3 text-center rounded-pill py-2">
+        {{ message }}
       </div>
+ 
+      <p class="text-center mt-4 mb-0 text-muted">
+        Already registered?
+        <a routerLink="/login" class="text-success fw-semibold text-decoration-none">
+          Login here
+        </a>
+      </p>
     </div>
   </div>
 </div>
