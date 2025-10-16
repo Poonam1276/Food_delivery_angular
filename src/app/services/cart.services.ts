@@ -1,20 +1,34 @@
+
 // import { Injectable } from '@angular/core';
 // import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import { Observable } from 'rxjs';
 
 // export interface CartItem {
-//   cartItemId: number;
+//   CartItemId:number;
 //   itemId: number;
-//   itemName: string;
-//   itemPrice: number;
+//   name: string;
+//   description: string;
+//   price: number;
 //   quantity: number;
+//   category: string;
+//   foodImage: string;
+// }
+
+// export interface CartGroup {
+//   cartId: number;
+//   customerId: number;
+//   restaurantId: number;
+//   restaurantName: string;
+//   totalAmount: number;
+//   items: {
+//     $id: string;
+//     $values: CartItem[];
+//   };
 // }
 
 // export interface CartResponse {
-//   cartId: number;
-//   userId: number;
-//   restaurantId: number;
-//   items: CartItem[];
+//   $id: string;
+//   $values: CartGroup[];
 // }
 
 // @Injectable({
@@ -25,51 +39,44 @@
 
 //   constructor(private http: HttpClient) {}
 
-//   // getCustomerCart(): Observable<CartResponse> {
-//   //   const token = localStorage.getItem('authToken');
-//   //   const headers = new HttpHeaders({
-//   //     Authorization: `Bearer ${token}`
-
-//   //   });
-//   //   console.log(headers);
-//   //   console.log('Authorization Header:', headers.get('Authorization'));
-
-//   //   return this.http.get<CartResponse>(`${this.baseUrl}/customer-cart`, { headers });
-//   // }
 //   getCustomerCart(): Observable<CartResponse> {
-//   const token = localStorage.getItem('authToken');
-//   const headers = new HttpHeaders({
-//     Authorization: `Bearer ${token}`
-//   });
+//     const token = localStorage.getItem('authToken');
+//     const headers = new HttpHeaders({
+//       Authorization: `Bearer ${token}`
+//     });
 
-//   return this.http.get<CartResponse>(`${this.baseUrl}/customer-cart`, { headers });
-// }
-
+//     return this.http.get<CartResponse>(`${this.baseUrl}/customer-carts`, { headers });
+//   }
 
 //   removeItem(cartItemId: number): Observable<any> {
 //     const token = localStorage.getItem('authToken');
 //     const headers = new HttpHeaders({
 //       Authorization: `Bearer ${token}`
 //     });
-//     console.log(headers);
 
 //     return this.http.delete(`${this.baseUrl}/remove-item/${cartItemId}`, { headers });
 //   }
 
-//   updateQuantity(cartItemId: number, quantity: number): Observable<any> {
-//     const token = localStorage.getItem('authToken');
-//     const headers = new HttpHeaders({
-//       Authorization: `Bearer ${token}`
-//     });
+//  updateQuantity(cartItemId: number, quantity: number): Observable<any> {
+//   const token = localStorage.getItem('authToken');
+//   const headers = new HttpHeaders({
+//     Authorization: `Bearer ${token}`
+//   });
 
-//     return this.http.put(`${this.baseUrl}/update-quantity/${cartItemId}`, { quantity }, { headers });
-//   }
+//   const body = {
+//     cartItemId: cartItemId,
+//     quantity: quantity
+//   };
+
+//   return this.http.put(`${this.baseUrl}/update-quantity`, body, { headers });
+// }
 // }
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface CartItem {
+  cartItemId: number; // ✅ used for update/remove
   itemId: number;
   name: string;
   description: string;
@@ -110,7 +117,7 @@ export class CartService {
       Authorization: `Bearer ${token}`
     });
 
-    return this.http.get<CartResponse>(`${this.baseUrl}/customer-cart`, { headers });
+    return this.http.get<CartResponse>(`${this.baseUrl}/customer-carts`, { headers });
   }
 
   removeItem(cartItemId: number): Observable<any> {
@@ -119,15 +126,20 @@ export class CartService {
       Authorization: `Bearer ${token}`
     });
 
-    return this.http.delete(`${this.baseUrl}/remove-item/${cartItemId}`, { headers });
+    return this.http.delete(`${this.baseUrl}/remove-item/${cartItemId}`, { headers , responseType:'text' as 'json'});
   }
 
   updateQuantity(cartItemId: number, quantity: number): Observable<any> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`
+  });
 
-    return this.http.put(`${this.baseUrl}/update-quantity/${cartItemId}`, { quantity }, { headers });
-  }
+  const body = {
+    cartItemId: cartItemId,
+    quantity: quantity
+  };
+
+  return this.http.put(`${this.baseUrl}/update-quantity`, body, { headers,responseType:'text' as 'json' });
+}
 }
