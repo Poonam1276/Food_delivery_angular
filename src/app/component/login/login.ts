@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {LoginService } from '../../services/login.service';
 import { RouterModule } from '@angular/router';
-
+ 
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -17,9 +17,9 @@ export class LoginComponent {
   otp: string = '';
   otpRequested: boolean = false;
   message: string = '';
-
+ 
   constructor(private loginService: LoginService) {}
-
+ 
   requestOtp() {
     this.loginService.requestOtp(this.email).subscribe({
       next: (res: any) => {
@@ -36,7 +36,7 @@ export class LoginComponent {
       }
     });
   }
-
+ 
   verifyOtp() {
     this.loginService.verifyOtp(this.email, this.otp).subscribe({
       next: (res: any) => {

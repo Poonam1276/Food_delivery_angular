@@ -1,0 +1,58 @@
+<div class="d-flex align-items-center justify-content-center vh-100 bg-light">
+    <div class="card p-5 shadow-lg" style="max-width: 600px; width: 100%;">
+        
+        <h2 class="text-center text-warning mb-4">Complete Your Restaurant Profile</h2>
+        <p class="text-center text-secondary mb-4">Please provide the mandatory operational details to activate your account.</p>
+
+        <form (ngSubmit)="onSubmitDetails()">
+            <div class="row">
+                
+                <div class="col-md-8 mb-3">
+                    <label class="form-label fw-bold">Address</label>
+                    <input type="text" class="form-control" [(ngModel)]="completionData.address" name="address" required placeholder="Enter Full Address">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label fw-bold">Pincode</label>
+                    <input type="text" class="form-control" [(ngModel)]="completionData.pincode" name="pincode" required placeholder="Pincode">
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">FSSAI ID</label>
+                    <input type="text" class="form-control" [(ngModel)]="completionData.fssaiId" name="fssaiId" required placeholder="License Number">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Trade ID</label>
+                    <input type="text" class="form-control" [(ngModel)]="completionData.tradeId" name="tradeId" required placeholder="License Number">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">FSSAI License Image (Upload)</label>
+                    <input type="file" class="form-control" (change)="onFileChange($event, 'fssai')" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Trade License Image (Upload)</label>
+                    <input type="file" class="form-control" (change)="onFileChange($event, 'trade')" required>
+                </div>
+
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold">Description / About Restaurant</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="completionData.description" name="description" placeholder="A short description of your restaurant"></textarea>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-warning fw-bold py-2" [disabled]="loading">
+                    @if (loading) {
+                        Submitting...
+                    } @else {
+                        Complete Profile and Continue to Dashboard
+                    }
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
