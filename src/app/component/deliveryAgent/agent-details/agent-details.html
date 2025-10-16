@@ -1,0 +1,29 @@
+<div class="agent-details-form">
+  <h2>Submit Delivery Agent Details</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
+    <div>
+      <label for="userId">User ID:</label>
+      <input type="text" formControlName="userId" readonly />
+    </div>
+
+    <div>
+      <label for="address">Address:</label>
+      <input type="text" id="address" formControlName="address" required />
+    </div>
+
+    <div>
+      <label for="document">Upload Document:</label>
+      <input type="file" id="document" (change)="onFileChange($event)" required />
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div *ngIf="successMessage" style="color: green;">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" style="color: red;">
+    {{ errorMessage }}
+  </div>
+</div>
