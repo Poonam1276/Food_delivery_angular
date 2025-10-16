@@ -1,33 +1,55 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h4 class="card-title text-center mb-4">Login with OTP</h4>
-
-          <form *ngIf="!otpRequested" (ngSubmit)="requestOtp()" #emailForm="ngForm">
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input type="email" id="email" class="form-control" placeholder="you@example.com"
-                     [(ngModel)]="email" name="email" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100" [disabled]="emailForm.invalid">Request OTP</button>
-          </form>
-
-          <form *ngIf="otpRequested" (ngSubmit)="verifyOtp()" #otpForm="ngForm">
-            <div class="mb-3">
-              <label for="otp" class="form-label">Enter OTP</label>
-              <input type="text" id="otp" class="form-control" placeholder="Enter OTP"
-                     [(ngModel)]="otp" name="otp" required>
-            </div>
-            <button type="submit" class="btn btn-success w-100" [disabled]="otpForm.invalid">Verify OTP</button>
-          </form>
-
-          <div *ngIf="message" class="alert alert-info mt-3 text-center">
-            {{ message }}
-          </div>
-        </div>
+<div class="login-container d-flex align-items-center justify-content-center">
+  <div class="card login-card shadow-lg p-4 rounded-4">
+    <h3 class="text-center text-success mb-3 fw-bold">Welcome Back!</h3>
+    <p class="text-center text-muted mb-4">
+      Login to continue ordering your favorite meals 🍴
+    </p>
+ 
+    <form (ngSubmit)="otpRequested ? verifyOtp() : requestOtp()" #loginForm="ngForm">
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          class="form-control rounded-pill"
+          placeholder="you@example.com"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
       </div>
+ 
+      <div *ngIf="otpRequested" class="mb-3">
+        <label for="otp" class="form-label fw-semibold">Enter OTP</label>
+        <input
+          type="text"
+          id="otp"
+          class="form-control rounded-pill"
+          placeholder="Enter 6-digit OTP"
+          [(ngModel)]="otp"
+          name="otp"
+          required
+        />
+      </div>
+ 
+      <button
+        type="submit"
+        class="btn btn-success w-100 rounded-pill fw-bold"
+        [disabled]="loginForm.invalid"
+      >
+        {{ otpRequested ? 'Verify OTP' : 'Request OTP' }}
+      </button>
+    </form>
+ 
+    <div *ngIf="message" class="alert alert-info mt-3 text-center rounded-pill py-2">
+      {{ message }}
     </div>
+ 
+    <p class="text-center mt-4 mb-0 text-muted">
+      New user?
+      <a routerLink="/signup" class="text-success fw-semibold text-decoration-none">
+        Create an account
+      </a>
+    </p>
   </div>
 </div>
