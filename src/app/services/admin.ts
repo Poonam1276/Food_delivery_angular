@@ -69,7 +69,7 @@ export class AdminService {
     });
   }
 
-  getAllrestaurant():Observable<any> {
-    return this.http.get(`https://localhost:7004/api/Restaurant/getAllrestaurants`);
-  }
+  getAllrestaurant(): Observable<Restaurant[]> {
+  return this.http.get<Restaurant[]>('https://localhost:7004/api/Restaurant/getAllrestaurants');
+}
 }

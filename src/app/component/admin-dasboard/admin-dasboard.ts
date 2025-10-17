@@ -16,10 +16,10 @@ export class AdminDasboard implements OnInit {
   menuItems = [
     { label: 'Verify Restaurant', icon: 'bi bi-check2-square' },
     { label: 'Verify Delivery Agent', icon: 'bi bi-person-check' },
-    { label: 'Update Profile', icon: 'bi bi-person-gear' },
-    { label: 'See All Menu Items', icon: 'bi bi-card-list' },
-    { label: 'See Graph', icon: 'bi bi-bar-chart' },
+    { label: 'See Delivery Agents', icon: 'bi bi-person-gear' },
     { label: 'See All Restaurants', icon: 'bi bi-shop' },
+    { label: 'See Graph', icon: 'bi bi-bar-chart' },
+    
   ];
 
   unverifiedRestaurants: Restaurant[] = [];
@@ -31,7 +31,7 @@ export class AdminDasboard implements OnInit {
   ngOnInit(): void {
     this.loadUnverifiedRestaurants();
     this.loadUnverifiedAgents();
-    //this.loadAllRestaurants();
+    this.loadAllRestaurants();
   }
 
   selectMenu(label: string): void {
@@ -41,9 +41,9 @@ export class AdminDasboard implements OnInit {
   } else if (label === 'Verify Delivery Agent') {
     this.loadUnverifiedAgents();
   }
-  // else if(label === 'See All Restaurants'){
-  //   this.loadAllRestaurants();
-  // }
+  else if(label === 'See All Restaurants'){
+    this.loadAllRestaurants();
+  }
 }
 
 loadUnverifiedRestaurants(): void {
@@ -118,24 +118,24 @@ openImage(imageUrl: string): void {
       }
     });
   }
-//   loadAllRestaurants():void{
-//     this.loading = true;
-//     this.adminService.getAllrestaurant().subscribe({
-//       next: (data: any) => {
-//       console.log('Raw restaurant data:', data);
-//       // this.unverifiedRestaurants = data.$values || [];
-//       this.unverifiedRestaurants = (data.$values || []).map((restaurant: any) => ({
-//   ...restaurant,
-//   submittedRestaurants: restaurant.submittedRestaurants?.$values || []
-// }));
-//       this.loading = false;
-//     },
-//     error: (err:any) => {
-//       console.error('Error loading restaurants:', err);
-//       this.loading = false;
-//     }
-//     })
-//   }
+  loadAllRestaurants():void{
+    this.loading = true;
+    this.adminService.getAllrestaurant().subscribe({
+      next: (data: any) => {
+      console.log('Raw restaurant data:', data);
+      // this.unverifiedRestaurants = data.$values || [];
+      this.unverifiedRestaurants = (data.$values || []).map((restaurant: any) => ({
+  ...restaurant,
+  submittedRestaurants: restaurant.submittedRestaurants?.$values || []
+}));
+      this.loading = false;
+    },
+    error: (err:any) => {
+      console.error('Error loading restaurants:', err);
+      this.loading = false;
+    }
+    })
+  }
   
  
 }
