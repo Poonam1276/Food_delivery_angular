@@ -49,17 +49,33 @@ error: (err: any) => {
     });
   }
 
-  verifyOtp() {
+ verifyOtp() {
   this.loginService.verifyOtp(this.email, this.otp).subscribe({
     next: (res: any) => {
       localStorage.setItem('authToken', res.token);
       this.authService.login(res.token); // ✅ notify navbar
       this.message = res.message || 'OTP verified successfully!';
 
-      const pinCode = localStorage.getItem('pinCode') || '';
-      this.router.navigate(['/menu'], {
-        queryParams: { pin: pinCode }
-      });
+      const role = res.role?.toLowerCase(); // assuming role is returned in response
+      switch (role) {
+        case 'admin':
+          window.location.href = '/admin-dashboard';
+          break;
+        case 'customer':
+          const pinCode = localStorage.getItem('pinCode') || '';
+          this.router.navigate(['/menu'], {
+            queryParams: { pin: pinCode }
+          });
+          break;
+        case 'restaurant':
+          window.location.href = '/dashboard';
+          break;
+        case 'delivery agent':
+          window.location.href = '/delivery-dashboard';
+          break;
+        default:
+          this.message = 'Unknown role. Cannot redirect.';
+      }
     },
     error: (err: any) => {
       this.message =

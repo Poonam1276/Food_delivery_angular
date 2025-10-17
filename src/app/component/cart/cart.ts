@@ -182,12 +182,14 @@ export class CartComponent implements OnInit {
     });
   }
 
-  calculateTotal() {
-    this.total = this.cartItems.reduce((sum, cart) => {
-      return sum + cart.items.reduce((subSum, item) => subSum + (item.price * item.quantity), 0);
-    }, 0);
-  }
+ calculateTotal() {
+  this.total = 0;
 
+  this.cartItems.forEach(cart => {
+    cart.totalAmount = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    this.total += cart.totalAmount;
+  });
+}
   toggleDropdown(cart: any) {
     cart.expanded = !cart.expanded;
   }

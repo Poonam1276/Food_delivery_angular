@@ -9,6 +9,7 @@ import {AdminDasboard} from './component/admin-dasboard/admin-dasboard'
 import { MenuComponent } from './component/menu/menu';
 import {adminGuard} from './auth/admin-guard';
 import {OrderComponent} from './component/order/order';
+import { CustomerDashboard } from './component/customer-dashboard/customer-dashboard';
 
 
 export const routes: Routes = [
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {path:'cart', component:CartComponent},
   {path:'about', component:About},
+  {path:'customer-dashboard', component:CustomerDashboard},
   {
   path: 'admin',
   component: AdminDasboard,
