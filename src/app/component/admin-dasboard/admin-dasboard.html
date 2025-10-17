@@ -1,0 +1,144 @@
+<div class="admin-dashboard">
+  <!-- Sidebar -->
+  <aside class="sidebar d-flex flex-column align-items-center py-4">
+    <!-- Profile -->
+    <div class="profile text-center mb-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin Profile" class="profile-img mb-2" />
+      <h5 class="text-white fw-semibold mb-0">Admin Panel</h5>
+      <small class="text-light">FoodieExpress</small>
+    </div>
+
+    <!-- Navigation -->
+    <ul class="nav flex-column w-100">
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a href="javascript:void(0)" class="nav-link d-flex align-items-center px-3 py-2"
+          [class.active]="selectedItem === item.label" (click)="selectMenu(item.label)">
+          <i [class]="item.icon + ' me-2'"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+
+  <main class="main-content">
+    <!-- Verify Restaurant -->
+    <div *ngIf="selectedItem === 'Verify Restaurant'" class="content-section">
+      <h3 class="section-title mb-4 text-swiggy">
+        🍽️ Unverified Restaurants
+      </h3>
+
+      <div *ngIf="unverifiedRestaurants.length === 0" class="empty-state">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076507.png" alt="No data" />
+        <p>No unverified restaurants found.</p>
+      </div>
+
+      <!-- <div
+      *ngFor="let restaurant of unverifiedRestaurants"
+      class="card restaurant-card shadow-sm p-3 mb-4 rounded-4"
+    >
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+        <div>
+          <h5 class="fw-bold mb-1">{{ restaurant.name }}</h5>
+          <p class="mb-1 text-muted">Email: {{ restaurant.email }}</p>
+        </div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+          <img
+            [src]="restaurant.fssaiImage"
+            alt="FSSAI"
+            class="doc-img"
+          />
+          <img
+            [src]="restaurant.tradelicenseImage"
+            alt="Trade License"
+            class="doc-img"
+          />
+        </div>
+        <button
+          class="btn btn-swiggy mt-3 mt-md-0"
+          (click)="verifyRestaurant(restaurant.userId)"
+        >
+          Verify ✅
+        </button>
+      </div>
+    </div> -->
+      <div *ngFor="let restaurant of unverifiedRestaurants" class="card restaurant-card shadow-sm p-3 mb-4 rounded-4">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+          <div>
+            <h5 class="fw-bold mb-1">{{ restaurant.name }}</h5>
+            <p class="mb-1 text-muted">Email: {{ restaurant.email }}</p>
+            <p class="mb-1 text-muted">Phone: {{ restaurant.phone }}</p>
+
+            <!-- Loop through submittedRestaurants -->
+            <div *ngFor="let r of restaurant.submittedRestaurants">
+
+
+              <p class="mb-1">Address: {{ r.address }}</p>
+              <p class="mb-1">FSSAI ID: {{ r.fssaiId }}</p>
+              <p class="mb-1">Trade ID: {{ r.tradeId }}</p>
+              <p class="mb-1">Pin Code: {{ r.pinCode }}</p>
+
+              <!-- Clickable thumbnails -->
+              <div class="d-flex gap-3 mt-2">
+                <img [src]="'https://localhost:7004' + r.fssaiImage" alt="FSSAI" class="doc-img"
+                  (click)="openImage('https://localhost:7004' + r.fssaiImage)" style="cursor: pointer;" />
+                <img [src]="r.tradelicenseImage" alt="Trade License" class="doc-img"
+                  (click)="openImage(r.tradelicenseImage)" style="cursor: pointer;" />
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-swiggy mt-3 mt-md-0" (click)="verifyRestaurant(restaurant.userId)">
+            Verify ✅
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div *ngIf="selectedItem === 'Verify Delivery Agent'" class="content-section">
+      <h3 class="section-title mb-4 text-swiggy">🚴 Unverified Delivery Agents</h3>
+
+      <div *ngIf="unverifiedRestaurants.length === 0" class="empty-state">
+        <img src="https://cdn-icons-png.flaticon.com/512/4076/4076507.png" alt="No data" />
+        <p>No unverified agents found.</p>
+      </div>
+
+      <div *ngFor="let agent of unverifiedAgents" class="card restaurant-card shadow-sm p-3 mb-4 rounded-4">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+          <div>
+            <h5 class="fw-bold mb-1">{{ agent.name }}</h5>
+            <p class="mb-1 text-muted">Email: {{ agent.email }}</p>
+            <p class="mb-1 text-muted">Phone: {{ agent.phone }}</p>
+            <p class="mb-1 text-muted">Address: {{ agent.address }}</p>
+
+            <!-- Show document image if available -->
+            <div *ngIf="agent.documentUrl" class="mt-2">
+              <img [src]="'https://localhost:7004' + agent.documentUrl" alt="Agent Document" class="doc-img"
+                (click)="openImage('https://localhost:7004' + agent.documentUrl)"
+                style="cursor: pointer; max-width: 200px;" />
+            </div>
+          </div>
+
+          <button class="btn btn-swiggy mt-3 mt-md-0" (click)="verifyAgent(agent.userId)">
+            Verify ✅
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Default Blank Section -->
+    <div *ngIf="!selectedItem"
+      class="blank-space text-center text-muted d-flex flex-column justify-content-center align-items-center">
+      <!-- <img
+      src="https://cdn-icons-png.flaticon.com/512/3515/3515240.png"
+      alt="Welcome"
+      class="welcome-img mb-3"
+    /> -->
+      <h3 class="text-swiggy fw-bold">Welcome to the Admin Dashboard 👋</h3>
+      <p>Select an option from the sidebar to get started.</p>
+    </div>
+  </main>
+
+</div>
