@@ -8,11 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './app/component/login/login';
 import { SignupComponent } from './app/component/signup/signup';
+import { CartComponent } from './app/component/cart/cart';
+import { CustomerDashboard } from './app/component/customer-dashboard/customer-dashboard';
 const routes: Routes = [
  { path: '', component: HomeComponent }, // default landing page
  { path: 'menu', component: MenuComponent }, // menu page
   { path: 'signup', component: SignupComponent },
-   { path: 'login', component: LoginComponent }
+   { path: 'login', component: LoginComponent },
+    {path:'cart', component:CartComponent},
+    {path: 'customer-dashboard', component: CustomerDashboard}
 ];
 bootstrapApplication(App, {
  providers: [

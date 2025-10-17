@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MenuService } from '../../services/menu.service';
 import { RouterModule } from '@angular/router';
-import { Navbar } from '../navbar/navbar';
+
 
  
 @Component({
@@ -31,6 +31,7 @@ goToMenu() {
      const menuData = res && res['$values'] ? res['$values'] : [];
      if (menuData.length > 0) {
        // valid PIN → navigate to menu page
+       localStorage.setItem('pinCode', this.pinCode.trim());
        this.router.navigate(['/menu'], { queryParams: { pin: this.pinCode.trim() } });
      } else {
        alert('Incorrect PIN code or no restaurant found');

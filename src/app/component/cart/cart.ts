@@ -1,40 +1,12 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../../services/cart.services';
-
-interface CartItem {
-  itemId: number;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  category: string;
-  foodImage: string;
-}
-
-interface CartGroup {
-  cartId: number;
-  customerId: number;
-  restaurantId: number;
-  restaurantName: string;
-  totalAmount: number;
-  items: {
-    $id: string;
-    $values: CartItem[];
-  };
-}
-
-interface CartResponse {
-  $id: string;
-  $values: CartGroup[];
-}
+import { CartService, CartItem, CartGroup, CartResponse } from '../../services/cart.services';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.html',
   styleUrls: ['./cart.css'],
- 
+  standalone: true,
   imports: [CommonModule]
 })
 export class CartComponent implements OnInit {
@@ -56,25 +28,25 @@ export class CartComponent implements OnInit {
   }
 
   loadCart() {
-  this.cartService.getCustomerCart().subscribe({
-    next: (response:CartResponse) => {
-      const carts = response?.$values || [];
+    this.cartService.getCustomerCart().subscribe({
+      next: (response: CartResponse) => {
+        const carts = response?.$values || [];
 
-      this.cartItems = carts.map((cart:any): typeof this.cartItems[number] => ({
-        restaurantId: cart.restaurantId,
-        restaurantName: cart.restaurantName,
-        totalAmount: cart.totalAmount,
-        items: cart.items?.$values || [],
-        expanded: false
-      })).filter((cart:any) => cart.items.length > 0);
+        this.cartItems = carts.map((cart: CartGroup) => ({
+          restaurantId: cart.restaurantId,
+          restaurantName: cart.restaurantName,
+          totalAmount: cart.totalAmount,
+          items: cart.items?.$values || [],
+          expanded: false
+        })).filter(cart => cart.items.length > 0);
 
-      this.calculateTotal();
-    },
-    error: (err) => {
-      console.error('Error fetching cart:', err);
-    }
-  });
-}
+        this.calculateTotal();
+      },
+      error: err => {
+        console.error('Error fetching cart:', err);
+      }
+    });
+  }
 
   calculateTotal() {
     this.total = this.cartItems.reduce((sum, cart) => {
@@ -86,21 +58,47 @@ export class CartComponent implements OnInit {
     cart.expanded = !cart.expanded;
   }
 
+  removeItem(cart: any, item: CartItem) {
+    this.cartService.removeItem(item.cartItemId).subscribe({
+      next: () => {
+        cart.items = cart.items.filter((i:any) => i.cartItemId !== item.cartItemId);
+        this.calculateTotal();
+      },
+      error: err => {
+        console.error('Failed to remove item:', err);
+        alert('Could not remove item from cart.');
+      }
+    });
+  }
+
   increaseQuantity(item: CartItem) {
-    item.quantity++;
-    this.calculateTotal();
+    const newQuantity = item.quantity + 1;
+    this.cartService.updateQuantity(item.cartItemId, newQuantity).subscribe({
+      next: () => {
+        item.quantity = newQuantity;
+        this.calculateTotal();
+      },
+      error: err => {
+        console.error('Failed to increase quantity:', err);
+        alert('Could not update quantity.');
+      }
+    });
   }
 
   decreaseQuantity(item: CartItem) {
     if (item.quantity > 1) {
-      item.quantity--;
-      this.calculateTotal();
+      const newQuantity = item.quantity - 1;
+      this.cartService.updateQuantity(item.cartItemId, newQuantity).subscribe({
+        next: () => {
+          item.quantity = newQuantity;
+          this.calculateTotal();
+        },
+        error: err => {
+          console.error('Failed to decrease quantity:', err);
+          alert('Could not update quantity.');
+        }
+      });
     }
-  }
-
-  removeItem(cart: any, item: CartItem) {
-    cart.items = cart.items.filter((i:any)=> i.itemId !== item.itemId);
-    this.calculateTotal();
   }
 
   applyCoupon() {
