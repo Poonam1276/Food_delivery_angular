@@ -1,16 +1,16 @@
 <div class="home-container position-relative vh-100 overflow-hidden">
-
+ 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container-fluid">
      <p>Foodiesss</p>
-
+ 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
               data-bs-target="#navbarNav" aria-controls="navbarNav"
               aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
+ 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
@@ -23,26 +23,38 @@
       </div>
     </div>
   </nav>
-
-  
-
+ 
+ 
+ 
   <!-- Background image and overlay -->
   <div class="image-background"></div>
   <div class="overlay"></div>
-
+ 
   <!-- Foreground content -->
   <div class="content content-overlay text-center">
     <h1 class="title">Find Delicious Food Near You 🍽️</h1>
     <p class="subtitle">Enter your PIN code to explore local restaurants and menus</p>
-
+ 
     <div class="search-bar d-flex justify-content-center align-items-center mx-auto">
       <input
         type="text"
         class="form-control bg-transparent text-white border-0"
         placeholder="Enter your PIN code"
-        [(ngModel)]="pincode"
+        [(ngModel)]="pinCode"
       />
-      <button class="btn search-btn ms-2" (click)="searchRestaurants()">Search</button>
+      <button class="btn search-btn ms-2"(click)="goToMenu()">Search</button>
     </div>
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+

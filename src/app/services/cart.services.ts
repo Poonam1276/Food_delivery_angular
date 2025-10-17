@@ -1,79 +1,6 @@
-
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import { Observable } from 'rxjs';
-
-// export interface CartItem {
-//   CartItemId:number;
-//   itemId: number;
-//   name: string;
-//   description: string;
-//   price: number;
-//   quantity: number;
-//   category: string;
-//   foodImage: string;
-// }
-
-// export interface CartGroup {
-//   cartId: number;
-//   customerId: number;
-//   restaurantId: number;
-//   restaurantName: string;
-//   totalAmount: number;
-//   items: {
-//     $id: string;
-//     $values: CartItem[];
-//   };
-// }
-
-// export interface CartResponse {
-//   $id: string;
-//   $values: CartGroup[];
-// }
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class CartService {
-//   private baseUrl = 'https://localhost:7004/api/Cart';
-
-//   constructor(private http: HttpClient) {}
-
-//   getCustomerCart(): Observable<CartResponse> {
-//     const token = localStorage.getItem('authToken');
-//     const headers = new HttpHeaders({
-//       Authorization: `Bearer ${token}`
-//     });
-
-//     return this.http.get<CartResponse>(`${this.baseUrl}/customer-carts`, { headers });
-//   }
-
-//   removeItem(cartItemId: number): Observable<any> {
-//     const token = localStorage.getItem('authToken');
-//     const headers = new HttpHeaders({
-//       Authorization: `Bearer ${token}`
-//     });
-
-//     return this.http.delete(`${this.baseUrl}/remove-item/${cartItemId}`, { headers });
-//   }
-
-//  updateQuantity(cartItemId: number, quantity: number): Observable<any> {
-//   const token = localStorage.getItem('authToken');
-//   const headers = new HttpHeaders({
-//     Authorization: `Bearer ${token}`
-//   });
-
-//   const body = {
-//     cartItemId: cartItemId,
-//     quantity: quantity
-//   };
-
-//   return this.http.put(`${this.baseUrl}/update-quantity`, body, { headers });
-// }
-// }
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 export interface CartItem {
   cartItemId: number; // ✅ used for update/remove
@@ -108,9 +35,35 @@ export interface CartResponse {
 })
 export class CartService {
   private baseUrl = 'https://localhost:7004/api/Cart';
-
+  private cartItems: any[] = [];
+  private cartCount = new BehaviorSubject<number>(0);
+  cartCount$ = this.cartCount.asObservable();
   constructor(private http: HttpClient) {}
 
+ 
+ addToCart(item: any): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const payload = {
+      itemId: item.itemId || item.id,
+      quantity: 1
+    };
+
+    return this.http.post(`${this.baseUrl}/add`, payload, { headers });
+  }
+
+
+ getCartCount() {
+   return this.cartCount.value;
+ }
+ clearCart() {
+   this.cartItems = [];
+   this.cartCount.next(0);
+ }
   getCustomerCart(): Observable<CartResponse> {
     const token = localStorage.getItem('authToken');
     const headers = new HttpHeaders({
@@ -142,4 +95,9 @@ export class CartService {
 
   return this.http.put(`${this.baseUrl}/update-quantity`, body, { headers,responseType:'text' as 'json' });
 }
+
+ updateCartCount(count: number) {
+    this.cartCount.next(count);
+  }
+
 }

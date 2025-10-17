@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {LoginService } from '../../services/login.service';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +18,19 @@ export class LoginComponent {
   otp: string = '';
   otpRequested: boolean = false;
   message: string = '';
+  returnUrl: string = '/';
+  constructor(private loginService: LoginService,
+     private authService: AuthService,
+  private router: Router,
+  private route: ActivatedRoute
+) {}
 
-  constructor(private loginService: LoginService) {}
+
+
+ngOnInit() {
+  this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/menu';
+}
+
 
   requestOtp() {
     this.loginService.requestOtp(this.email).subscribe({
@@ -28,28 +40,33 @@ export class LoginComponent {
           ? res
           : res.message || 'OTP sent successfully.';
       },
-      error: (err:any) => {
-        this.message =
-          typeof err.error === 'string'
-            ? err.error
-            : 'Failed to send OTP. Please try again.';
-      }
+      
+error: (err: any) => {
+  console.error('OTP Request Error:', err);
+  this.message = err.error?.toString() || err.message || 'Failed to send OTP. Please try again.';
+}
+
     });
   }
 
   verifyOtp() {
-    this.loginService.verifyOtp(this.email, this.otp).subscribe({
-      next: (res: any) => {
-        localStorage.setItem('authToken', res.token);
-        this.message = res.message || 'OTP verified successfully!';
-        // Optionally redirect to dashboard here
-      },
-      error: (err:any) => {
-        this.message =
-          typeof err.error === 'string'
-            ? err.error
-            : 'OTP verification failed. Please try again.';
-      }
-    });
-  }
+  this.loginService.verifyOtp(this.email, this.otp).subscribe({
+    next: (res: any) => {
+      localStorage.setItem('authToken', res.token);
+      this.authService.login(res.token); // ✅ notify navbar
+      this.message = res.message || 'OTP verified successfully!';
+
+      const pinCode = localStorage.getItem('pinCode') || '';
+      this.router.navigate(['/menu'], {
+        queryParams: { pin: pinCode }
+      });
+    },
+    error: (err: any) => {
+      this.message =
+        typeof err.error === 'string'
+          ? err.error
+          : 'OTP verification failed. Please try again.';
+    }
+  });
+}
 }

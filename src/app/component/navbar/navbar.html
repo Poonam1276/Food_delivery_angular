@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg navbar-light custom-navbar shadow-sm">
+<div class="container-fluid px-4">
+<!-- Logo -->
+<a class="navbar-brand d-flex align-items-center" routerLink="/">
+<img src="assets/logo1.png" alt="FoodZyaka" width="55" height="42" class="me-2 rounded-circle" />
+<span class="fw-bold text-white fs-4">FoodZyaka</span>
+</a>
+<!-- Toggler for mobile -->
+<button
+     class="navbar-toggler"
+     type="button"
+     data-bs-toggle="collapse"
+     data-bs-target="#navbarNav"
+     aria-controls="navbarNav"
+     aria-expanded="false"
+     aria-label="Toggle navigation">
+<span class="navbar-toggler-icon"></span>
+</button>
+<!-- Navigation Links -->
+<div class="collapse navbar-collapse" id="navbarNav">
+<ul class="navbar-nav ms-auto align-items-lg-center">
+<li class="nav-item mx-2">
+<a class="nav-link text-white fw-semibold" routerLink="/about">About</a>
+</li>
+<li class="nav-item mx-2" *ngIf="!isLoggedIn">
+<a class="nav-link text-white fw-semibold" routerLink="/login">Sign In</a>
+</li>
+<li class="nav-item mx-2" *ngIf="!isLoggedIn">
+<a class="nav-link text-white fw-semibold" routerLink="/signup">Sign Up</a>
+</li>
+<li class="nav-item mx-2" *ngIf="isLoggedIn">
+<a class="nav-link text-white fw-semibold" routerLink="/profile">Profile</a>
+</li>
+<li class="nav-item mx-2" *ngIf="isLoggedIn">
+<a class="nav-link text-white fw-semibold" (click)="logout()">Logout</a>
+</li>
+<!-- Cart -->
+<li class="nav-item position-relative ms-3">
+<a class="nav-link text-white fw-semibold" routerLink="/cart">
+<img src="assets/cart1.png" alt="Cart" width="28" height="28" />
+<span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
+             {{ cartCount }}
+</span>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</nav>
