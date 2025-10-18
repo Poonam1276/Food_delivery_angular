@@ -7,7 +7,9 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-order',
   imports:[CommonModule,FormsModule],
-  templateUrl: './order.html'
+  templateUrl: './order.html',
+  styleUrls: ['./order.css']
+
 })
 export class OrderComponent implements OnInit {
   cartId: number = 0;
@@ -69,20 +71,48 @@ getAddresses() {
   });
 }
 
+
 addAddress() {
-    this.orderService.addAddress(this.newAddress).subscribe({
-      next: (res: any) => {
-        alert('Address added successfully!');
-        this.getAddresses(); // Refresh list
-        this.newAddress = {}; // Reset form
-      },
-      error: (err) => {
-        console.error('Error adding address:', err);
-        alert(err.error?.message || 'Failed to add address');
-      }
-    });
+  if (
+    !this.newAddress.addressLine1 ||
+    !this.newAddress.city ||
+    !this.newAddress.state ||
+    !this.newAddress.pinCode
+  ) {
+    alert('Please fill all required fields');
+    return;
   }
 
+  const payload = {
+    addressLine1: this.newAddress.addressLine1,
+    addressLine2: this.newAddress.addressLine2,
+    landmark: this.newAddress.landmark,
+    city: this.newAddress.city,
+    state: this.newAddress.state,
+    pinCode: this.newAddress.pinCode,
+    isDefault: this.newAddress.isDefault || false
+  };
+
+  this.orderService.addAddress(payload).subscribe({
+    next: (res: any) => {
+      alert('Address added successfully!');
+      this.getAddresses();
+      this.newAddress = {
+        addressLine1: '',
+        addressLine2: '',
+        landmark: '',
+        city: '',
+        state: '',
+        pinCode: null,
+        isDefault: true
+      };
+    },
+    error: (err) => {
+      console.error('Error adding address:', err);
+      alert(err.error?.message || 'Failed to add address');
+    }
+  });
+}
   assignAddress() {
     if (!this.orderId || !this.addressId) return;
 

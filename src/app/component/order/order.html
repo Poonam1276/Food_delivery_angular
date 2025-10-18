@@ -1,93 +1,29 @@
-<!-- <div *ngIf="step === 1">
-  <p>Creating your order...</p>
-</div>
-
-<div *ngIf="step === 2">
-  <h3>Ordered Items</h3>
-  <ul>
-    <li *ngFor="let item of bill?.items">
-      {{ item.quantity }} x {{ item.itemName }} @ ₹{{ item.price }} = ₹{{ item.total }}
-    </li>
-  </ul>
-
-  <h4>Select Delivery Address</h4>
-  <div class="select-address">
-  <h3>Select Delivery Address</h3>
-  <select [(ngModel)]="addressId">
-    <option *ngFor="let addr of addresses" [value]="addr.addressId">
-      {{ addr.addressLine1 }}, {{ addr.city }} - {{ addr.pinCode }}
-    </option>
-  </select>
-  <button (click)="assignAddress()">Use This Address</button>
-</div>
-<div class="add-address-form">
-  <h3>Add New Address</h3>
-  <form (ngSubmit)="addAddress()" #addressForm="ngForm">
-    <input type="text" name="addressLine1" [(ngModel)]="newAddress.addressLine1" placeholder="Address Line 1" required />
-    <input type="text" name="addressLine2" [(ngModel)]="newAddress.addressLine2" placeholder="Address Line 2" />
-    <input type="text" name="landmark" [(ngModel)]="newAddress.landmark" placeholder="Landmark" />
-    <input type="text" name="city" [(ngModel)]="newAddress.city" placeholder="City" required />
-    <input type="text" name="state" [(ngModel)]="newAddress.state" placeholder="State" required />
-    <input type="number" name="pinCode" [(ngModel)]="newAddress.pinCode" placeholder="Pin Code" required />
-    <label>
-      <input type="checkbox" [(ngModel)]="newAddress.isDefault" name="isDefault" />
-      Set as default
-    </label>
-    <button type="submit">Save Address</button>
-  </form>
-</div>
-
-
-  <p><strong>Payment Method:</strong> Cash on Delivery</p>
-  <button class="btn btn-success" (click)="assignAddress()" [disabled]="!addressId">
-    Confirm Order
-  </button>
-</div>
-
-<div *ngIf="step === 3 && bill">
-  <h3>Order Summary</h3>
-  <p><strong>Restaurant:</strong> {{ bill.restaurantName }}</p>
-  <p><strong>Delivery Agent:</strong> {{ bill.agentName }}</p>
-  <p><strong>Distance:</strong> {{ bill.distanceKm }} km</p>
-  <p><strong>Estimated Time:</strong> {{ bill.estimatedTimeMinutes }} mins</p>
-  <p><strong>Delivery Charge:</strong> ₹{{ bill.deliveryCharge }}</p>
-  <p><strong>Items Total:</strong> ₹{{ bill.itemsTotal }}</p>
-  <p><strong>Grand Total:</strong> ₹{{ bill.grandTotal }}</p>
-
-  <h4>Ordered Items</h4>
-  <ul>
-    <li *ngFor="let item of bill.items">
-      {{ item.quantity }} x {{ item.itemName }} @ ₹{{ item.price }} = ₹{{ item.total }}
-    </li>
-  </ul>
-</div> -->
-
-
 <div class="order-container">
   <!-- Step 1: Order Creation -->
   <div *ngIf="step === 1" class="step step-1">
     <div class="loading">
-      <img src="https://cdn.dribbble.com/users/1187278/screenshots/3718681/media/6f92a7614802df74b531b2b0cc0f6bdb.gif" alt="loading" />
+      <img src="https://cdn.dribbble.com/users/1187278/screenshots/3718681/media/6f92a7614802df74b531b2b0cc0f6bdb.gif"
+        alt="loading" />
       <p>Creating your order...</p>
     </div>
   </div>
- 
+
   <!-- Step 2: Address Selection -->
   <div *ngIf="step === 2" class="step step-2">
     <div class="order-card">
-      <h2 class="heading">Your Ordered Items 🍱</h2>
+      <h2 class="heading">Your Order</h2>
       <ul class="order-items">
         <li *ngFor="let item of bill?.items" class="item">
           <span>{{ item.quantity }} × {{ item.itemName }}</span>
           <span class="price">₹{{ item.total }}</span>
         </li>
       </ul>
- 
+
       <hr />
- 
+
       <!-- Address Selection -->
       <div class="address-section">
-        <h3>Select Delivery Address 🏠</h3>
+        <h3>Select Delivery Address </h3>
         <select [(ngModel)]="addressId" class="address-select">
           <option *ngFor="let addr of addresses" [value]="addr.addressId">
             {{ addr.addressLine1 }}, {{ addr.city }} - {{ addr.pinCode }}
@@ -95,66 +31,41 @@
         </select>
         <button class="btn use-address" (click)="assignAddress()">Use This Address</button>
       </div>
- 
+
       <div class="divider">OR</div>
- 
+
       <!-- Add New Address -->
       <div class="add-address-form">
         <h3>Add New Address</h3>
         <form (ngSubmit)="addAddress()" #addressForm="ngForm">
-          <input
-            type="text"
-            name="addressLine1"
-            [(ngModel)]="newAddress.addressLine1"
-            placeholder="Address Line 1"
-            required
-          />
-          <input
-            type="text"
-            name="addressLine2"
-            [(ngModel)]="newAddress.addressLine2"
-            placeholder="Address Line 2"
-          />
-          <input
-            type="text"
-            name="landmark"
-            [(ngModel)]="newAddress.landmark"
-            placeholder="Landmark"
-          />
+          <input type="text" name="addressLine1" [(ngModel)]="newAddress.addressLine1" placeholder="Address Line 1"
+            required />
+          <input type="text" name="addressLine2" [(ngModel)]="newAddress.addressLine2" placeholder="Address Line 2" />
+          <input type="text" name="landmark" [(ngModel)]="newAddress.landmark" placeholder="Landmark" />
           <div class="city-state">
             <input type="text" name="city" [(ngModel)]="newAddress.city" placeholder="City" required />
             <input type="text" name="state" [(ngModel)]="newAddress.state" placeholder="State" required />
           </div>
-          <input
-            type="number"
-            name="pinCode"
-            [(ngModel)]="newAddress.pinCode"
-            placeholder="Pin Code"
-            required
-          />
+          <input type="text" name="pinCode" [(ngModel)]="newAddress.pinCode" placeholder="Pin Code" required />
           <label class="checkbox">
             <input type="checkbox" [(ngModel)]="newAddress.isDefault" name="isDefault" />
             Set as default
           </label>
-          <button type="submit" class="btn add-btn">Save Address</button>
+          <button type="submit" class="btn add-btn" (click) = "addAddress()">Save Address </button>
         </form>
       </div>
- 
-      <p class="payment"><strong>Payment Method:</strong> Cash on Delivery 💵</p>
-      <button
-        class="btn confirm-btn"
-        (click)="assignAddress()"
-        [disabled]="!addressId"
-      >
+
+      <p class="payment"><strong>Payment Method:</strong> Cash on Delivery </p>
+      <button class="btn confirm-btn" (click)="assignAddress()" [disabled]="!addressId">
         Confirm Order
       </button>
     </div>
   </div>
- 
+
   <!-- Step 3: Order Summary -->
   <div *ngIf="step === 3 && bill" class="step step-3">
     <div class="summary-card">
-      <h2>Order Summary ✅</h2>
+      <h2>Order Summary </h2>
       <p><strong>Restaurant:</strong> {{ bill.restaurantName }}</p>
       <p><strong>Delivery Agent:</strong> {{ bill.agentName }}</p>
       <p><strong>Distance:</strong> {{ bill.distanceKm }} km</p>
@@ -162,15 +73,15 @@
       <p><strong>Delivery Charge:</strong> ₹{{ bill.deliveryCharge }}</p>
       <p><strong>Items Total:</strong> ₹{{ bill.itemsTotal }}</p>
       <p><strong>Grand Total:</strong> ₹{{ bill.grandTotal }}</p>
- 
+
       <h4 class="mt-4">Ordered Items</h4>
       <ul class="order-items">
         <li *ngFor="let item of bill.items" class="item">
-          <span>{{ item.quantity }} × {{ item.itemName }}</span>
+          <span>{{ item.quantity }} {{ item.itemName }}</span>
           <span class="price">₹{{ item.total }}</span>
         </li>
       </ul>
- 
+
       <button class="btn track-btn">Track Your Order 🚴‍♂️</button>
     </div>
   </div>
