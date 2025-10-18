@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
   selector: 'app-order',
-  imports:[CommonModule,FormsModule],
-  templateUrl: './order.html'
+  imports:[CommonModule,FormsModule, RouterLink, NavbarComponent],
+  templateUrl: './order.html',
+  styleUrl: './order.css'
 })
 export class OrderComponent implements OnInit {
   cartId: number = 0;
@@ -16,6 +18,8 @@ export class OrderComponent implements OnInit {
   bill: any = null;
   step: number = 1;
   addresses: any[] = [];
+  showAddAddressForm: boolean = false;
+  orderPlaced: boolean = false;
   
 newAddress: any = {
     addressLine1: '',
@@ -26,12 +30,7 @@ newAddress: any = {
     pinCode: null,
     isDefault: false
   };
-
-
   constructor(private route: ActivatedRoute, private orderService: OrderService) {}
-
-
-
 ngOnInit(): void {
   this.route.queryParamMap.subscribe(params => {
     this.cartId = Number(params.get('cartId'));
@@ -69,19 +68,58 @@ getAddresses() {
   });
 }
 
-addAddress() {
-    this.orderService.addAddress(this.newAddress).subscribe({
-      next: (res: any) => {
-        alert('Address added successfully!');
-        this.getAddresses(); // Refresh list
-        this.newAddress = {}; // Reset form
-      },
-      error: (err) => {
-        console.error('Error adding address:', err);
-        alert(err.error?.message || 'Failed to add address');
-      }
-    });
+
+  toggleAddAddressForm() {
+    this.showAddAddressForm = !this.showAddAddressForm;
   }
+
+  confirmOrder() {
+  // You can call an API to finalize the order here if needed
+  this.orderPlaced = true;
+}
+addAddress() {
+  if (
+    !this.newAddress.addressLine1 ||
+    !this.newAddress.city ||
+    !this.newAddress.state ||
+    !this.newAddress.pinCode
+  ) {
+    alert('Please fill all required fields');
+    return;
+  }
+ 
+  const payload = {
+    addressLine1: this.newAddress.addressLine1,
+    addressLine2: this.newAddress.addressLine2,
+    landmark: this.newAddress.landmark,
+    city: this.newAddress.city,
+    state: this.newAddress.state,
+    pinCode: this.newAddress.pinCode,
+    isDefault: this.newAddress.isDefault || false
+  };
+ 
+  this.orderService.addAddress(payload).subscribe({
+    next: (res: any) => {
+      alert('Address added successfully!');
+      this.addresses.push(res); // or refresh address list from backend
+      this.showAddAddressForm = false;
+      this.getAddresses();
+      this.newAddress = {
+        addressLine1: '',
+        addressLine2: '',
+        landmark: '',
+        city: '',
+        state: '',
+        pinCode: null,
+        isDefault: true
+      };
+    },
+    error: (err) => {
+      console.error('Error adding address:', err);
+      alert(err.error?.message || 'Failed to add address');
+    }
+  });
+}
 
   assignAddress() {
     if (!this.orderId || !this.addressId) return;
