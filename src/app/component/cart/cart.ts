@@ -1,40 +1,14 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from '../../services/cart.services';
-
-interface CartItem {
-  itemId: number;
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  category: string;
-  foodImage: string;
-}
-
-interface CartGroup {
-  cartId: number;
-  customerId: number;
-  restaurantId: number;
-  restaurantName: string;
-  totalAmount: number;
-  items: {
-    $id: string;
-    $values: CartItem[];
-  };
-}
-
-interface CartResponse {
-  $id: string;
-  $values: CartGroup[];
-}
+import { Router } from '@angular/router';
+import { CartService, CartItem, CartGroup, CartResponse } from '../../services/cart.services';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.html',
   styleUrls: ['./cart.css'],
- 
+  standalone: true,
   imports: [CommonModule]
 })
 export class CartComponent implements OnInit {
@@ -48,59 +22,96 @@ export class CartComponent implements OnInit {
 
   total: number = 0;
   couponCode: string = 'AXP5Ty';
+  cartId: number = 0; // ✅ Added cartId
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit() {
     this.loadCart();
   }
 
   loadCart() {
-  this.cartService.getCustomerCart().subscribe({
-    next: (response:CartResponse) => {
-      const carts = response?.$values || [];
+    this.cartService.getCustomerCart().subscribe({
+      next: (response: CartResponse) => {
+        const carts = response?.$values || [];
 
-      this.cartItems = carts.map((cart:any): typeof this.cartItems[number] => ({
-        restaurantId: cart.restaurantId,
-        restaurantName: cart.restaurantName,
-        totalAmount: cart.totalAmount,
-        items: cart.items?.$values || [],
-        expanded: false
-      })).filter((cart:any) => cart.items.length > 0);
+        this.cartItems = carts.map((cart: CartGroup) => {
+          // ✅ Assign cartId from the first cart group (assuming one cart per customer)
+          if (!this.cartId) {
+            this.cartId = cart.cartId;
+          }
 
-      this.calculateTotal();
-    },
-    error: (err) => {
-      console.error('Error fetching cart:', err);
-    }
-  });
-}
+          return {
+            cartId : cart.cartId,
+            restaurantId: cart.restaurantId,
+            restaurantName: cart.restaurantName,
+            totalAmount: cart.totalAmount,
+            items: cart.items?.$values || [],
+            expanded: false
+          };
+        }).filter(cart => cart.items.length > 0);
 
-  calculateTotal() {
-    this.total = this.cartItems.reduce((sum, cart) => {
-      return sum + cart.items.reduce((subSum, item) => subSum + (item.price * item.quantity), 0);
-    }, 0);
+        this.calculateTotal();
+      },
+      error: err => {
+        console.error('Error fetching cart:', err);
+      }
+    });
   }
 
+ calculateTotal() {
+  this.total = 0;
+
+  this.cartItems.forEach(cart => {
+    cart.totalAmount = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    this.total += cart.totalAmount;
+  });
+}
   toggleDropdown(cart: any) {
     cart.expanded = !cart.expanded;
   }
 
+  removeItem(cart: any, item: CartItem) {
+    this.cartService.removeItem(item.cartItemId).subscribe({
+      next: () => {
+        cart.items = cart.items.filter((i: any) => i.cartItemId !== item.cartItemId);
+        this.calculateTotal();
+      },
+      error: err => {
+        console.error('Failed to remove item:', err);
+        alert('Could not remove item from cart.');
+      }
+    });
+  }
+
   increaseQuantity(item: CartItem) {
-    item.quantity++;
-    this.calculateTotal();
+    const newQuantity = item.quantity + 1;
+    this.cartService.updateQuantity(item.cartItemId, newQuantity).subscribe({
+      next: () => {
+        item.quantity = newQuantity;
+        this.calculateTotal();
+      },
+      error: err => {
+        console.error('Failed to increase quantity:', err);
+        alert('Could not update quantity.');
+      }
+    });
   }
 
   decreaseQuantity(item: CartItem) {
     if (item.quantity > 1) {
-      item.quantity--;
-      this.calculateTotal();
+      const newQuantity = item.quantity - 1;
+      this.cartService.updateQuantity(item.cartItemId, newQuantity).subscribe({
+        next: () => {
+          item.quantity = newQuantity;
+          this.calculateTotal();
+        },
+        error: err => {
+          console.error('Failed to decrease quantity:', err);
+          alert('Could not update quantity.');
+        }
+      });
     }
-  }
-
-  removeItem(cart: any, item: CartItem) {
-    cart.items = cart.items.filter((i:any)=> i.itemId !== item.itemId);
-    this.calculateTotal();
   }
 
   applyCoupon() {
@@ -108,7 +119,20 @@ export class CartComponent implements OnInit {
     this.couponCode = '';
   }
 
-  checkout() {
-    alert('Proceeding to checkout...');
+  // checkout() {
+  //   if (!this.cartId) {
+  //     alert('Cart ID not found. Please try again.');
+  //     return;
+  //   }
+  //   this.router.navigate(['/order'], { queryParams: { cartId: this.cartId } });
+  // }
+  checkout(cart: any) {
+  if (!cart.cartId) {
+    alert('Cart ID not found. Please try again.');
+    return;
   }
+
+  this.router.navigate(['/order'], { queryParams: { cartId: cart.cartId } });
+}
+
 }

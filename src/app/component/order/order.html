@@ -1,0 +1,165 @@
+<app-navbar></app-navbar>
+<div class="order-container py-5">
+<div class="order-card shadow-lg rounded-4 p-4 mx-auto">
+<!-- STEP 1: Creating Order -->
+<div *ngIf="step === 1" class="text-center py-5">
+<div class="spinner-border text-orange mb-3" role="status"></div>
+<h4 class="fw-semibold text-orange">Creating your order...</h4>
+<p class="text-muted">Please wait while we prepare your cart details.</p>
+</div>
+<!-- STEP 2: Select or Add Address -->
+<div *ngIf="step === 2">
+<h3 class="fw-bold text-orange text-center mb-4">Select Delivery Address</h3>
+<!-- Address List -->
+<div class="mb-4">
+<select
+         [(ngModel)]="addressId"
+         class="form-select border-primary shadow-sm"
+         aria-label="Select address"
+>
+<option value="" disabled selected>Select your address</option>
+<option *ngFor="let addr of addresses" [value]="addr.addressId">
+           {{ addr.addressLine1 }}, {{ addr.city }} - {{ addr.pinCode }}
+</option>
+</select>
+<div class="text-center mt-4">
+<button
+           class="btn btn-orange px-4 py-2 fw-semibold"
+           (click)="assignAddress()"
+           [disabled]="!addressId"
+>
+<i class="bi bi-geo-alt-fill me-2"></i>Use This Address
+</button>
+</div>
+</div>
+<hr class="my-4" />
+<div class="text-center mb-3">
+  <button class="btn btn-outline-primary fw-semibold" style="background-color: #ffa500;" (click)="showAddAddressForm = !showAddAddressForm">
+    <i class="bi bi-plus-circle me-2"></i>
+    {{ showAddAddressForm ? 'Cancel' : 'Add New Address' }}
+  </button>
+</div>
+<!-- Add New Address -->
+ <div *ngIf="showAddAddressForm">
+<h4 class="fw-bold text-blue mb-3">Add New Address</h4>
+<form (ngSubmit)="addAddress()" #addressForm="ngForm" class="add-address-form">
+<div class="row g-3">
+<div class="col-md-6">
+<input
+             type="text"
+             name="addressLine1"
+             [(ngModel)]="newAddress.addressLine1"
+             class="form-control"
+             placeholder="Address Line 1"
+             required
+           />
+</div>
+<div class="col-md-6">
+<input
+             type="text"
+             name="addressLine2"
+             [(ngModel)]="newAddress.addressLine2"
+             class="form-control"
+             placeholder="Address Line 2"
+           />
+</div>
+<div class="col-md-4">
+<input
+             type="text"
+             name="landmark"
+             [(ngModel)]="newAddress.landmark"
+             class="form-control"
+             placeholder="Landmark"
+           />
+</div>
+<div class="col-md-4">
+<input
+             type="text"
+             name="city"
+             [(ngModel)]="newAddress.city"
+             class="form-control"
+             placeholder="City"
+             required
+           />
+</div>
+<div class="col-md-4">
+<input
+             type="text"
+             name="state"
+             [(ngModel)]="newAddress.state"
+             class="form-control"
+             placeholder="State"
+             required
+           />
+</div>
+<div class="col-md-4">
+<input
+             type="text"
+             name="pinCode"
+             [(ngModel)]="newAddress.pinCode"
+             class="form-control"
+             placeholder="Pin Code"
+             required
+           />
+</div>
+<div class="col-md-4 d-flex align-items-center">
+<input
+             type="checkbox"
+             [(ngModel)]="newAddress.isDefault"
+             name="isDefault"
+             class="form-check-input me-2"
+           />
+<label class="form-check-label">Set as default</label>
+</div>
+<div class="col-12 text-center mt-3">
+<button type="submit" class="btn btn-blue px-4 py-2 fw-semibold">
+<i class="bi bi-plus-circle me-2"></i>Save Address
+</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<!-- STEP 3: Order Summary -->
+<div *ngIf="step === 3 && bill">
+<h3 class="fw-bold text-orange text-center mb-3">Order Summary</h3>
+<div class="summary-card p-3 rounded-3 bg-light mb-4">
+<p><strong>Restaurant:</strong> {{ bill.restaurantName }}</p>
+<p><strong>Delivery Agent:</strong> {{ bill.agentName }}</p>
+<p><strong>Distance:</strong> {{ bill.distanceKm }} km</p>
+<p><strong>Estimated Time:</strong> {{ bill.estimatedTimeMinutes }} mins</p>
+<p><strong>Delivery Charge:</strong> ₹{{ bill.deliveryCharge }}</p>
+<p><strong>Items Total:</strong> ₹{{ bill.itemsTotal }}</p>
+<p class="fw-bold fs-5 text-dark">
+<strong>Grand Total:</strong> ₹{{ bill.grandTotal }}
+</p>
+</div>
+<h4 class="fw-bold text-blue mb-3">Ordered Items</h4>
+<ul class="list-group shadow-sm">
+<li
+         class="list-group-item d-flex justify-content-between align-items-center"
+         *ngFor="let item of bill.items"
+>
+<span>{{ item.quantity }} × {{ item.itemName }}</span>
+<span class="fw-semibold text-orange">₹{{ item.total }}</span>
+</li>
+</ul>
+<div *ngIf="!orderPlaced" class="text-center mt-4">
+<p class="text-muted mb-2"><strong>Payment Method:</strong> Cash on Delivery</p>
+<button class="btn btn-orange px-5 py-2 fw-semibold" (click)="confirmOrder()">
+<i class="bi bi-bag-check-fill me-2"></i>Confirm Order
+</button>
+</div>
+<!-- Success Message Block -->
+<div *ngIf="orderPlaced" class="text-center py-5">
+  <h2 class="text-success fw-bold mb-4">🎉 Order Placed Successfully! 🎉</h2>
+  <p class="text-muted fs-5">Your delicious food is on its way!</p>
+  <div class="mt-5">
+    <a routerLink="/menu" class="btn btn-orange px-4 py-2 fw-semibold">
+      <i class="bi bi-arrow-left-circle me-2"></i>Back to Menu
+    </a>
+  </div>
+</div>
+</div>
+</div>
+</div>
