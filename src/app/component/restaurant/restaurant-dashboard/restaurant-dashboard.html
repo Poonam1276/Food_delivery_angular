@@ -1,104 +1,131 @@
-<div class="d-flex vw-100 vh-100">
-  
-  <aside class="custom-sidebar d-flex flex-column text-white">
-    <div class="logo text-center p-4 fs-4 fw-bold">
-      FOOD DELIVERY
+ 
+<div class="restaurant-dashboard">
+  <aside class="sidebar d-flex flex-column align-items-center py-4">
+    <div class="profile text-center mb-4">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+        alt="Restaurant Profile"
+        class="profile-img rounded-circle mb-2"
+      />
+      <small class="text-light fw-bold">FoodZyaka</small>
     </div>
-    
-    <nav class="sidebar-nav flex-grow-1 pt-3">
-      <a href="#" class="nav-item active-nav-item d-flex align-items-center py-3 ps-4 text-decoration-none">
-        <i class="bi bi-person-fill me-3"></i> Profile
-      </a>
-
-      <a href="#" class="nav-item d-flex align-items-center py-3 ps-4 text-white text-decoration-none" id="manage-menu-link">
-        <i class="bi bi-list-ul me-3"></i> Manage Menu
-      </a>
-
-      <!-- <a (click)="authService.logout()" class="nav-item d-flex align-items-center py-3 ps-4 text-white text-decoration-none mt-auto">
-        <i class="bi bi-box-arrow-right me-3"></i> Logout
-      </a> -->
-    </nav>
+ 
+    <ul class="nav flex-column w-100">
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a class="nav-link text-light"
+           href="javascript:void(0)"
+           (click)="selectedItem = item.label"
+           [class.active]="selectedItem === item.label">
+          <i [class]="item.icon + ' me-2'"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
   </aside>
+ 
+  <main class="main-content">
+    <div *ngIf="selectedItem === 'Welcome'" class="content-section">
+      <h3 class="section-title mb-4 text-swiggy">👋 Welcome to FoodZyaka</h3>
+      <p>Select an option from the sidebar to get started.</p>
+    </div>
+ 
+    <div *ngIf="selectedItem === 'Profile'" class="content-section">
+      <h3 class="section-title mb-4 text-swiggy">🏠 Restaurant Profile</h3>
+      <form *ngIf="form" [formGroup]="form" class="profile-form">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Address:</label>
+            <input formControlName="address" type="text" class="form-control" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Pin Code:</label>
+            <input formControlName="pinCode" type="text" class="form-control" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">FSSAI ID:</label>
+            <input formControlName="fssaiId" type="text" class="form-control" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Trade ID:</label>
+            <input formControlName="tradeId" type="text" class="form-control" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-swiggy mt-3" (click)="updateProfile()">Update Profile</button>
+      </form>
+      <p class="text-success mt-2">{{ message }}</p>
+    </div>
+ <div *ngIf="selectedItem === 'Manage Menu'" class="content-section">
+  <h3 class="section-title mb-4 text-swiggy">🍽️ Manage Menu</h3>
+  <button class="btn btn-sm btn-warning mb-3" (click)="openAddModal()">Add Menu Item</button>
 
-  <main class="flex-grow-1 p-4 custom-main-bg">
-    
-    <header class="d-flex justify-content-between align-items-center mb-4">
-      <div class="input-group search-box shadow-sm">
-        <span class="input-group-text bg-white border-0"><i class="bi bi-search"></i></span>
-        <input type="text" class="form-control border-0" placeholder="Search">
-      </div>
-      <div class="d-flex align-items-center">
-        <i class="bi bi-bell-fill fs-5 me-4 text-secondary"></i>
-        <img src="assets/user-avatar.jpg" alt="User" class="rounded-circle avatar-sm">
-      </div>
-    </header>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Available</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of menuItemsList">
+        <td>{{ item.name }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.isAvailable ? 'Yes' : 'No' }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="editItem(item)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteItem(item.itemId)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <form class="card shadow-sm border-0 p-4">
-      <h2 class="text-warning fs-3 mb-4">Restaurant Details</h2>
-
-      <h5 class="mb-3 text-secondary">Initial Registration Details (Read-Only)</h5>
-      <div class="row mb-4 border p-3 rounded bg-light">
-        
-        <div class="col-md-4 mb-3">
-          <label class="form-label fw-bold">Restaurant Name</label>
-          <input type="text" class="form-control" value="The Great Bistro" readonly>
+  <div *ngIf="showAddModal" class="modal-backdrop">
+    <div class="modal-content p-4 bg-light rounded">
+      <h5>{{ isEditMode ? 'Edit Menu Item' : 'Add Menu Item' }}</h5>
+      <form [formGroup]="menuForm" (ngSubmit)="addMenuItem()">
+        <div class="mb-3">
+          <label>Name:</label>
+          <input formControlName="name" type="text" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label>Description:</label>
+          <textarea formControlName="description" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+          <label>Price:</label>
+          <input formControlName="price" type="number" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label>Category:</label>
+          <select formControlName="category" class="form-control">
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label>Available:</label>
+          <input formControlName="isAvailable" type="checkbox" />
         </div>
 
-        <div class="col-md-4 mb-3">
-          <label class="form-label fw-bold">Email</label>
-          <input type="email" class="form-control" value="resto@example.com" readonly>
+        <!-- Show file input only in Add mode -->
+        <div class="mb-3" *ngIf="!isEditMode">
+          <label>Food Image:</label>
+          <input type="file" (change)="onFileChange($event)" class="form-control" />
         </div>
 
-        <div class="col-md-4 mb-3">
-          <label class="form-label fw-bold">Phone No.</label>
-          <input type="text" class="form-control" value="(123) 456-7890" readonly>
-        </div>
-      </div>
-
-      <h5 class="mb-3 text-warning">Required Completion Details</h5>
-      <div class="row">
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label fw-bold">Address</label>
-          <input type="text" class="form-control" placeholder="Enter Full Address" required>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label fw-bold">Pincode</label>
-          <input type="text" class="form-control" placeholder="Enter Pincode" required>
-        </div>
-        
-        <div class="col-md-6 mb-3">
-          <label class="form-label fw-bold">FSSAI ID</label>
-          <input type="text" class="form-control" placeholder="Enter FSSAI License Number" required>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label fw-bold">Trade ID</label>
-          <input type="text" class="form-control" placeholder="Enter Trade License Number" required>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label fw-bold">FSSAI License Image</label>
-          <input type="file" class="form-control" required>
-        </div>
-
-        <div class="col-md-6 mb-3">
-          <label class="form-label fw-bold">Trade License Image</label>
-          <input type="file" class="form-control" required>
-        </div>
-
-      </div>
-
-      <div class="mb-4">
-        <label class="form-label fw-bold">Description / About Restaurant</label>
-        <textarea class="form-control" rows="3" placeholder="A short description of your restaurant"></textarea>
-      </div>
-
-      <div class="text-end pt-3">
-        <button type="submit" class="btn btn-warning fw-bold px-4 py-2">Submit Details</button>
-      </div>
-    </form>
-  </main>
-
+        <button type="submit" class="btn btn-sm btn-warning me-2">
+          {{ isEditMode ? 'Update' : 'Add' }}
+        </button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="resetModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
 </div>
+</main>
+</div>
+ 
+ 

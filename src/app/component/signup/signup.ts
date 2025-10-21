@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { RouterModule } from '@angular/router';
-
+import { Router, RouterModule } from '@angular/router';
  
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule,  RouterModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
@@ -23,21 +22,31 @@ export class SignupComponent {
  
   message: string = '';
  
-  constructor(private authService: AuthService) {}
- 
-  onSubmit() {
-    this.authService.signup(this.user).subscribe({
-      next: (response) => {
-        this.message = response.message || 'Registration successful!';
-      },
-      error: (error) => {
-        if (error.status === 409) {
-          this.message = error.error;
-        } else {
-          this.message = 'An error occurred during registration.';
-        }
+  constructor(private authService: AuthService, private router: Router) {}
+ onSubmit() {
+  this.authService.signup(this.user).subscribe({
+    next: (response) => {
+      this.message = response.message || 'Registration successful!';
+
+      // ✅ Store userId for later use
+      localStorage.setItem('userId', response.userId.toString());
+
+      if (this.user.role === 'Restaurant') {
+        this.router.navigate(['/profilecompletion'], {
+          queryParams: {
+            name: this.user.name,
+            email: this.user.email
+          }
+        });
       }
-    });
-  }
+    },
+    error: (error) => {
+      if (error.status === 409) {
+        this.message = error.error;
+      } else {
+        this.message = 'An error occurred during registration.';
+      }
+    }
+  });
 }
- 
+}

@@ -1,89 +1,226 @@
-// src/app/features/dashboards/restaurant/restaurant-dashboard.component.ts
-
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // 👈 Import FormsModule for binding
-import { AuthService } from '../../../services/auth.service';
-import { RestaurantService,RestaurantDetails } from '../../../services/restaurant.service'; // Import the new Service
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { RestaurantService } from '../../../services/restaurant.service';
+import { MenuItemService, MenuItemViewDto } from '../../../services/menuitem.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-restaurant-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Ensure FormsModule is here
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './restaurant-dashboard.html',
   styleUrls: ['./restaurant-dashboard.css']
 })
-export class RestaurantDashboards implements OnInit {
-  authService = inject(AuthService);
-  restaurantService = inject(RestaurantService);
+export class RestaurantDashboard implements OnInit {
+  selectedItem = 'Welcome';
+  menuItems = [
+    { label: 'Welcome', icon: 'bi bi-house' },
+    { label: 'Profile', icon: 'bi bi-person' },
+    { label: 'Manage Menu', icon: 'bi bi-list' },
+    { label: 'Logout', icon: 'bi bi-box-arrow-right' }
+  ];
 
-  // Model to hold the data fetched from the API and the data entered in the form
-  restaurantData: RestaurantDetails = {
-    name: 'Loading...',
-    email: 'Loading...',
-    phone: 'Loading...',
-    address: null,
-    pincode: null,
-    fssaiId: null,
-    tradeId: null
-  };
-  
-  // Variables to hold uploaded files
-  fssaiImage: File | null = null;
-  tradeLicenseImage: File | null = null;
+  form!: FormGroup;
+  menuForm!: FormGroup;
+  message = '';
+  showAddModal = false;
+  categories = ['Beverages', 'Main Course', 'Desserts', 'Snacks', 'Salads'];
+  menuItemsList: MenuItemViewDto[] = [];
+  selectedFile: File | null = null;
+  editingItem: MenuItemViewDto | null = null;
+  isEditMode = false;
+  foodImage?: File;
+
+  constructor(
+    private fb: FormBuilder,
+    private restaurantService: RestaurantService,
+    private menuItemService: MenuItemService
+  ) {}
 
   ngOnInit(): void {
-    // 🚨 In a real app, this would fetch data from the API
-    // this.fetchRestaurantDetails(); 
+    const userIdString = localStorage.getItem('userId');
+    if (!userIdString || isNaN(Number(userIdString))) {
+      this.message = 'User ID not found. Please login again.';
+      return;
+    }
 
-    // Simulation for immediate testing (remove this when connecting to backend)
-    setTimeout(() => {
-        this.restaurantData = {
-          name: 'The Great Bistro (Fetched)',
-          email: 'resto@example.com',
-          phone: '(999) 888-7777',
-          address: '456 Oak St.', // Existing data will be pre-filled
-          pincode: '90001',
-          fssaiId: '10120230000XXX',
-          tradeId: 'TL2023-XXXX'
-        };
-    }, 500);
-  }
+    const userId = Number(userIdString);
 
-  fetchRestaurantDetails(): void {
-    this.restaurantService.getRestaurantDetails().subscribe({
-        next: (data) => {
-            this.restaurantData = data;
-        },
-        error: (err) => {
-            console.error('Error fetching restaurant details:', err);
-            // Handle error (e.g., show message)
-        }
+    this.form = this.fb.group({
+      restaurantId: [0],
+      userId: [userId],
+      address: [''],
+      fssaiId: [''],
+      pinCode: [null],
+      tradeId: [''],
+      fssaiImage: [''],
+      tradelicenseImage: ['']
+    });
+
+    this.menuForm = this.fb.group({
+      name: [''],
+      description: [''],
+      price: [0],
+      isAvailable: [true],
+      category: ['']
+    });
+
+    this.restaurantService.getRestaurantByUserId(userId).subscribe({
+      next: (data) => {
+        this.form.patchValue({
+          restaurantId: data.restaurantId,
+          address: data.address,
+          fssaiId: data.fssaiId,
+          pinCode: data.pinCode,
+          tradeId: data.tradeId,
+          fssaiImage: data.fssaiImage,
+          tradelicenseImage: data.tradelicenseImage
+        });
+
+        this.loadMenuItems();
+      },
+      error: () => {
+        this.message = 'Failed to load profile.';
+      }
     });
   }
 
-  onSubmitDetails(): void {
-    // 1. Create a FormData object to handle text fields and files
-    const formData = new FormData();
-    
-    // Append all text fields
-    Object.keys(this.restaurantData).forEach(key => {
-        formData.append(key, (this.restaurantData as any)[key]);
+  selectMenu(label: string): void {
+    if (label === 'Logout') {
+      localStorage.clear();
+      window.location.href = '/login';
+    } else {
+      this.selectedItem = label;
+    }
+  }
+
+updateProfile(): void {
+  const restaurantId = this.form.get('restaurantId')?.value;
+
+  if (!restaurantId || restaurantId === 0) {
+    this.message = 'Invalid restaurant ID. Cannot update profile.';
+    return;
+  }
+
+  const dto = {
+    restaurantId: restaurantId,
+    userId: this.form.get('userId')?.value,
+    address: this.form.get('address')?.value,
+    fssaiId: this.form.get('fssaiId')?.value,
+    pinCode: this.form.get('pinCode')?.value,
+    tradeId: this.form.get('tradeId')?.value,
+    fssaiImage: this.form.get('fssaiImage')?.value,
+    tradelicenseImage: this.form.get('tradelicenseImage')?.value
+  };
+
+  this.restaurantService.updateRestaurant(dto).subscribe({
+    next: () => {
+      this.message = 'Profile updated successfully!';
+    },
+    error: () => {
+      this.message = 'Update failed. Please try again.';
+    }
+  });
+}
+
+  loadMenuItems(): void {
+    const restaurantId = this.form.get('restaurantId')?.value;
+
+    this.menuItemService.getItemsByRestaurant(restaurantId).subscribe({
+      next: (response: any) => {
+        this.menuItemsList = Array.isArray(response.$values) ? response.$values : [];
+        console.log("Loaded menu items:", this.menuItemsList);
+      },
+      error: () => {
+        console.error("Failed to load menu items.");
+        this.menuItemsList = [];
+      }
     });
+  }
 
-    // Append files
-    if (this.fssaiImage) formData.append('fssaiImage', this.fssaiImage, this.fssaiImage.name);
-    if (this.tradeLicenseImage) formData.append('tradeLicenseImage', this.tradeLicenseImage, this.tradeLicenseImage.name);
+  resetModal(): void {
+    this.showAddModal = false;
+    this.menuForm.reset();
+    this.selectedFile = null;
+    this.editingItem = null;
+    this.isEditMode = false;
+  }
 
-    // 2. Call the service to submit
-    this.restaurantService.updateRestaurantDetails(formData).subscribe({
+  openAddModal(): void {
+    this.resetModal();
+    this.showAddModal = true;
+    this.isEditMode = false;
+  }
+
+  onFileChange(event: any): void {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
+  }
+
+  addMenuItem(): void {
+    const formValue = this.menuForm.value;
+
+    if (this.isEditMode && this.editingItem) {
+      const dto = {
+        name: formValue.name,
+        description: formValue.description,
+        price: formValue.price,
+        isAvailable: formValue.isAvailable,
+        category: formValue.category
+      };
+
+      this.menuItemService.updateItem(this.editingItem.itemId, dto).subscribe({
         next: () => {
-            alert('Restaurant details updated successfully!');
+          this.resetModal();
+          this.loadMenuItems();
         },
-        error: (err) => {
-            console.error('Error updating restaurant details:', err);
-            alert('Failed to update details. Check console.');
+        error: () => {
+          alert('Failed to update menu item.');
         }
+      });
+    } else {
+      const dto = {
+        name: formValue.name,
+        description: formValue.description,
+        price: formValue.price,
+        isAvailable: formValue.isAvailable,
+        category: formValue.category,
+        foodImage: this.selectedFile ?? undefined
+      };
+
+      this.menuItemService.addItem(dto).subscribe({
+        next: () => {
+          this.resetModal();
+          this.loadMenuItems();
+        },
+        error: () => {
+          alert('Failed to add menu item.');
+        }
+      });
+    }
+  }
+
+  editItem(item: MenuItemViewDto): void {
+    this.editingItem = item;
+    this.isEditMode = true;
+    this.showAddModal = true;
+
+    this.menuForm.patchValue({
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      isAvailable: item.isAvailable,
+      category: item.category
     });
+  }
+
+  deleteItem(id: number): void {
+    if (confirm('Are you sure you want to delete this item?')) {
+      this.menuItemService.deleteItem(id).subscribe(() => {
+        this.loadMenuItems();
+      });
+    }
   }
 }
