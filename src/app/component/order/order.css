@@ -1,0 +1,165 @@
+/* ====== Layout ====== */
+.order-container {
+ min-height: 100vh;
+ background-color: #f0f0f0;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 30px 0;
+}
+.order-card {
+ background: #ffffff;
+ width: 85%;
+ max-width: 900px;
+ border-top: 6px solid #ffa500;
+ border-radius: 12px;
+ box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+ padding: 30px;
+}
+/* ====== Typography ====== */
+.text-orange {
+ color: #ffa500;
+}
+.text-blue {
+ color: #1e90ff;
+}
+.heading {
+ text-align: center;
+ color: #ffa500;
+ font-weight: 700;
+ margin-bottom: 20px;
+}
+/* ====== Buttons ====== */
+.btn {
+ display: inline-block;
+ padding: 10px 16px;
+ font-weight: 600;
+ border: none;
+ border-radius: 8px;
+ color: #fff;
+ cursor: pointer;
+ transition: all 0.3s ease;
+}
+.btn-orange {
+ background-color: #ffa500;
+}
+.btn-orange:hover {
+ background-color: #ff8c00;
+}
+.btn-blue {
+ background-color: #1e90ff;
+}
+.btn-blue:hover {
+ background-color: #1c86ee;
+}
+.track-btn {
+ width: 100%;
+ background: #27ae60;
+ margin-top: 15px;
+}
+.track-btn:hover {
+ background-color: #219150;
+}
+/* ====== Inputs ====== */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+ width: 100%;
+ padding: 10px;
+ margin: 8px 0;
+ border-radius: 8px;
+ border: 1px solid #ccc;
+ outline: none;
+ transition: 0.3s;
+}
+input:focus,
+select:focus,
+textarea:focus {
+ border-color: #1e90ff !important;
+ box-shadow: 0 0 4px rgba(30, 144, 255, 0.4);
+}
+/* ====== Address Section ====== */
+.address-section,
+.add-address-form {
+ margin-top: 25px;
+}
+.address-select {
+ width: 100%;
+ padding: 10px;
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ margin-bottom: 10px;
+}
+.city-state {
+ display: flex;
+ gap: 10px;
+}
+.city-state input {
+ flex: 1;
+}
+/* ====== Divider ====== */
+.divider {
+ text-align: center;
+ color: #999;
+ margin: 20px 0;
+ position: relative;
+}
+.divider::before,
+.divider::after {
+ content: "";
+ position: absolute;
+ top: 50%;
+ width: 40%;
+ height: 1px;
+ background: #ddd;
+}
+.divider::before {
+ left: 0;
+}
+.divider::after {
+ right: 0;
+}
+/* ====== Order Summary ====== */
+.summary-card {
+ background-color: #fafafa;
+ border-left: 5px solid #ffa500;
+ padding: 20px;
+ margin-top: 20px;
+ border-radius: 8px;
+}
+.summary-card p {
+ margin: 5px 0;
+ color: #333333;
+}
+/* ====== Items List ====== */
+.order-items {
+ list-style: none;
+ padding: 0;
+ margin: 15px 0;
+}
+.order-items .item {
+ display: flex;
+ justify-content: space-between;
+ padding: 8px 0;
+ border-bottom: 1px solid #f1f1f1;
+}
+.order-items .price {
+ color: #ffa500;
+ font-weight: 600;
+}
+/* ====== Animation ====== */
+@keyframes fadeIn {
+ from {
+   opacity: 0;
+   transform: translateY(20px);
+ }
+ to {
+   opacity: 1;
+   transform: translateY(0);
+ }
+}
+.step {
+ animation: fadeIn 0.6s ease-in-out;
+}

@@ -1,0 +1,74 @@
+/* Full-page background with gradient and pattern overlay */
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+      rgba(255, 122, 0, 0.6),
+      rgba(255, 122, 0, 0.7)
+    ),
+    url('https://images.unsplash.com/photo-1606755962773-0d56b6d01d9b?auto=format&fit=crop&w=1350&q=80')
+      center/cover no-repeat;
+  background-attachment: fixed;
+}
+ 
+/* Login card */
+.login-card {
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: pop 0.5s ease;
+}
+ 
+/* Swiggy orange color */
+.text-swiggy {
+  color: #fc8019;
+}
+ 
+.btn-swiggy {
+  background-color: #fc8019;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+ 
+.btn-swiggy:hover {
+  background-color: #e66f00;
+  transform: scale(1.03);
+}
+ 
+/* Smooth pop animation */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+ 
+/* Inputs */
+.form-control {
+  padding: 10px 15px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+}
+ 
+.form-control:focus {
+  border-color: #fc8019;
+  box-shadow: 0 0 5px rgba(252, 128, 25, 0.4);
+}
+ 
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .login-card {
+    margin: 0 20px;
+    padding: 2rem;
+  }
+}
+ 

@@ -1,0 +1,50 @@
+.custom-navbar {
+ background-color: #f57c00 !important; /* organic orange */
+ padding: 0.8rem 1.5rem;
+ height: 70px;
+ position: sticky;
+ top: 0;
+ z-index: 1000;
+ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.navbar-brand img {
+ border: 2px solid #fff;
+ border-radius: 50%;
+}
+.nav-link {
+ position: relative;
+ color: #fff !important;
+ font-weight: 500;
+ font-size: 1rem;
+ margin: 0 10px;
+ transition: color 0.3s ease;
+}
+/* Underline effect */
+.nav-link::after {
+ content: '';
+ position: absolute;
+ left: 0;
+ bottom: -3px;
+ width: 0;
+ height: 2px;
+ background-color: #fff;
+ transition: width 0.3s ease;
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+ width: 100%;
+}
+/* Hover color */
+.nav-link:hover {
+ color: #ffe082 !important;
+}
+.badge {
+ font-size: 0.7rem;
+ padding: 3px 6px;
+}
+.navbar-toggler {
+ border: none;
+}
+.navbar-toggler:focus {
+ box-shadow: none;
+}

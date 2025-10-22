@@ -1,0 +1,65 @@
+
+<div class="cart-container container mt-5">
+  <h2 class="cart-title mb-4 text-center">🛒 Your Cart</h2>
+ 
+  <div *ngFor="let cart of cartItems" class="cart-card card mb-4 shadow-lg border-0">
+    <div class="card-header d-flex justify-content-between align-items-center bg-white py-3">
+      <div>
+        <h5 class="restaurant-name mb-1">{{ cart.restaurantName }}</h5>
+        <span class="text-muted fw-semibold">Total: ₹{{ cart.totalAmount }}</span>
+      </div>
+      <button class="btn btn-outline-warning btn-sm" (click)="toggleDropdown(cart)">
+        {{ cart.expanded ? 'Hide Items' : 'Show Items' }}
+      </button>
+      <button
+  class="btn btn-warning text-white fw-semibold px-4"
+  (click)="checkout(cart)">
+  Proceed to Checkout →
+</button>
+    </div>
+ 
+    <div *ngIf="cart.expanded" class="card-body bg-light">
+      <div *ngFor="let item of cart.items" class="cart-item row align-items-center py-3 px-2 mb-3 rounded shadow-sm">
+        <div class="col-md-2 col-4 text-center">
+          <img [src]="item.foodImage" alt="{{ item.name }}" class="food-img rounded-3" />
+        </div>
+ 
+        <div class="col-md-4 col-8">
+          <h5 class="item-name mb-1">{{ item.name }}</h5>
+          <p class="text-muted small mb-1">{{ item.description }}</p>
+          <p class="small mb-0"><strong>Category:</strong> {{ item.category }}</p>
+        </div>
+ 
+        <div class="col-md-2 col-6 text-md-center mt-3 mt-md-0">
+          <p class="fw-bold text-success">₹{{ item.price }}</p>
+        </div>
+ 
+        <div class="col-md-2 col-6 text-center">
+          <div class="input-group quantity-group">
+            <button class="btn btn-outline-dark" (click)="decreaseQuantity(item)">−</button>
+            <input type="text" class="form-control text-center" [value]="item.quantity" readonly />
+            <button class="btn btn-outline-dark" (click)="increaseQuantity(item)">+</button>
+          </div>
+        </div>
+ 
+        <div class="col-md-2 text-end mt-3 mt-md-0">
+          <button class="btn btn-danger btn-sm" (click)="removeItem(cart, item)">
+            <i class="bi bi-trash"></i> Remove
+          </button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="cart-summary text-center mt-5">
+    <h4 class="fw-bold mb-3">Grand Total: ₹{{ total }}</h4>
+ 
+    <div class="d-flex justify-content-center gap-3 mb-4">
+      <button class="btn btn-outline-success" (click)="applyCoupon()">🎟️ Apply Coupon</button>
+      <!-- <button class="btn btn-warning text-white fw-semibold px-4" >
+        Proceed to Checkout →
+      </button> -->
+    </div>
+  </div>
+</div>

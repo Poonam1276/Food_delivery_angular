@@ -1,0 +1,78 @@
+ .about-page {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fffaf5;
+}
+ 
+/* Hero Section */
+.hero {
+  background: linear-gradient(rgba(252, 128, 25, 0.85), rgba(252, 128, 25, 0.85)),
+    url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1350&q=80')
+      center/cover no-repeat;
+  height: 60vh;
+  color: white;
+  padding: 20px;
+}
+ 
+/* Text Colors */
+.text-swiggy {
+  color: #fc8019;
+}
+ 
+/* Why Choose Us */
+.feature-card {
+  border: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+}
+ 
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+ 
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+ 
+/* Mission Section */
+.mission {
+  background-color: #fff8f2;
+}
+ 
+.mission-text {
+  max-width: 500px;
+}
+ 
+.mission-img {
+  width: 350px;
+  max-width: 100%;
+  border-radius: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+ 
+/* Floating Image Animation */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+ 
+/* Responsive */
+@media (max-width: 768px) {
+  .mission {
+    text-align: center;
+  }
+ 
+  .mission-img {
+    margin-top: 20px;
+  }
+}
+ 
