@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
- 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule,  RouterModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
@@ -20,15 +19,32 @@ export class SignupComponent {
     phone: '',
     role: ''
   };
- 
+
   message: string = '';
- 
-  constructor(private authService: AuthService) {}
- 
+
+  constructor(private authService: AuthService, private router: Router) { }
+
   onSubmit() {
     this.authService.signup(this.user).subscribe({
       next: (response) => {
         this.message = response.message || 'Registration successful!';
+
+        if (response.userId) {
+          localStorage.setItem('userId', response.userId.toString());
+          console.log('Stored userId:', response.userId);
+        } else {
+          console.warn('userId not returned from backend');
+        }
+
+        // Redirect only if role is DeliveryAgent
+        if (this.user.role === 'DeliveryAgent') {
+          this.router.navigate(['/delivery-agent-details'], {
+            queryParams: {
+              name: this.user.name,
+              email: this.user.email
+            }
+          });
+        }
       },
       error: (error) => {
         if (error.status === 409) {
@@ -40,4 +56,3 @@ export class SignupComponent {
     });
   }
 }
- 
