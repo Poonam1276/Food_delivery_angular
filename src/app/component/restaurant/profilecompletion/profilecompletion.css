@@ -1,0 +1,51 @@
+/* src/app/component/restaurant/profilecompletion/profilecompletion.css */
+
+/* Container and card styling */
+.container {
+margin-top: 60px;
+}
+.card {
+border: none;
+border-radius: 12px;
+background-color: #ffffff; /* White background */
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+/* Header styling */
+.card-title {
+font-size: 26px;
+font-weight: bold;
+color: #ff8c00; /* Darker orange for warning/restaurant theme */
+}
+
+.text-warning {
+    color: #ff8c00 !important;
+}
+
+/* Form labels and inputs */
+.form-label {
+ font-weight: 600;
+ color: #34495e;
+}
+
+.form-control {
+ border-radius: 6px;
+ font-size: 14px;
+}
+
+/* Submit button - Changed to match the restaurant's 'warning' theme */
+.btn-warning {
+ background-color: #ff8c00;
+ border: none;
+ font-weight: bold;
+  color: white; /* Ensure text is readable */
+}
+
+.btn-warning:hover {
+ background-color: #e67e22; /* Slightly darker orange on hover */
+}
+
+/* Success and error messages */
+.alert {
+ font-size: 14px;
+ padding: 10px;
+}

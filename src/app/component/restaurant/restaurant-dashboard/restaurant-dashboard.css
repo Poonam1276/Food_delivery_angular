@@ -1,0 +1,172 @@
+.restaurant-dashboard {
+  display: flex;
+  height: 100vh;
+}
+.sidebar {
+  width: 220px;
+  background-color: #f57c00;
+  color: white;
+  padding: 20px;
+}
+.sidebar .nav-link {
+  color: white;
+  font-weight: 500;
+}
+.sidebar .nav-link.active {
+  background-color: #f57c00;
+  border-radius: 5px;
+}
+.profile-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.main-content {
+  flex: 1;
+  padding: 30px;
+}
+.section-title {
+  font-size: 1.5rem;
+}
+.profile-form {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+.profile-form label {
+  margin-top: 10px;
+}
+.profile-form input {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.btn-swiggy {
+  background-color: #fc8019;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+ 
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 10px;
+}
+ 
+.custom-modal {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+ 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+ 
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+ 
+@media (max-width: 576px) {
+  .custom-modal {
+    padding: 20px;
+    max-width: 90%;
+  }
+}
+ 
+/* Custom Modal Overlay - Ensures the modal is centered and covers the screen */
+.modal-backdrop { /* Update the class used in your HTML */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker, more professional overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Vertically and horizontally center the modal */
+    z-index: 1050; /* Ensure it is on top of everything */
+}
+ 
+/* Custom Modal Content - Styles the actual popup box */
+.modal-content { /* Update the class used in your HTML */
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%; /* Responsive width */
+    max-width: 550px; /* Maximum size for desktop/tablet */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative; /* Needed for any absolute positioning inside */
+}
+ 
+/* Animation for a smoother appearance */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px); /* Small slide-down effect */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+ 
+/* Responsive adjustment for small screens */
+@media (max-width: 576px) {
+    .modal-content {
+        padding: 20px;
+        width: 95%; /* Take up a bit more space on very small screens */
+        max-height: 90vh; /* Prevent modal from running off-screen vertically */
+        overflow-y: auto; /* Allow scrolling if content is too long */
+    }
+}
+ 
+/* Added a more vibrant style for the category select to match the theme */
+.modal-content select.form-control {
+    border: 1px solid #fc8019; /* Swiggy-like color border */
+    box-shadow: 0 0 5px rgba(252, 128, 25, 0.2);
+}
+ 
+/* General button styling for a more attractive look */
+.modal-content .btn {
+    font-weight: 600;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+ 
+.modal-content .btn-success {
+    background-color: #4CAF50; /* A clean green for 'Add' */
+    border-color: #4CAF50;
+}
+ 
+.modal-content .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+ 
+.modal-content .btn:hover {
+    filter: brightness(110%);
+    transform: translateY(-1px);
+} 

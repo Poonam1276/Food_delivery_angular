@@ -1,0 +1,69 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4 text-warning">Complete Your Restaurant Profile</h3>
+                    <p class="text-center text-muted mb-4">Please provide the operational details and licenses.</p>
+
+                    <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
+                        
+                        <div class="mb-3">
+                            <input type="hidden" formControlName="userId" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-9 mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" id="address" class="form-control" formControlName="address" required placeholder="Enter Full Address" />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="pinCode" class="form-label">Pincode</label>
+                                <input type="number" id="pinCode" class="form-control" formControlName="pinCode" required placeholder="123456" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fssaiId" class="form-label">FSSAI ID</label>
+                                <input type="text" id="fssaiId" class="form-control" formControlName="fssaiId" required placeholder="FSSAI License Number" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tradeId" class="form-label">Trade ID</label>
+                                <input type="text" id="tradeId" class="form-control" formControlName="tradeId" required placeholder="Trade License Number" />
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fssaiImage" class="form-label">FSSAI License Image</label>
+                                <input type="file" id="fssaiImage" class="form-control" 
+                                       (change)="onFileChange($event, 'fssaiImage')" required />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tradelicenseImage" class="form-label">Trade License Image</label>
+                                <input type="file" id="tradelicenseImage" class="form-control" 
+                                       (change)="onFileChange($event, 'tradelicenseImage')" required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-warning w-100 fw-bold py-2">Complete and Continue</button>
+                    </form>
+
+                    <div *ngIf="successMessage" class="alert alert-success mt-3 text-center">
+                        {{ successMessage }}
+                        <p class="mt-3 mb-0 text-muted">
+                            To access your dashboard,
+                            <a routerLink="/login" class="text-success fw-semibold text-decoration-none">
+                                login here
+                            </a>.
+                        </p>
+                    </div>
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+                        {{ errorMessage }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

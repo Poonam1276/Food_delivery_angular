@@ -3,9 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {LoginService } from '../../services/login.service';
+<<<<<<< HEAD
+import { RouterModule } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
+ 
+=======
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
+>>>>>>> 3d102429375c0c146c8055fa677e902fe1f050ab
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -18,6 +24,11 @@ export class LoginComponent {
   otp: string = '';
   otpRequested: boolean = false;
   message: string = '';
+<<<<<<< HEAD
+ 
+  constructor(private loginService: LoginService) {}
+ 
+=======
   returnUrl: string = '/';
   constructor(private loginService: LoginService,
      private authService: AuthService,
@@ -32,6 +43,7 @@ ngOnInit() {
 }
 
 
+>>>>>>> 3d102429375c0c146c8055fa677e902fe1f050ab
   requestOtp() {
     this.loginService.requestOtp(this.email).subscribe({
       next: (res: any) => {
@@ -48,7 +60,45 @@ error: (err: any) => {
 
     });
   }
+ 
+ verifyOtp() {
+  this.loginService.verifyOtp(this.email, this.otp).subscribe({
+    next: (res: any) => {
+      localStorage.setItem('authToken', res.token);
+      this.message = res.message || 'OTP verified successfully!';
+      
+      const user: any = jwtDecode(res.token);
+      console.log("Decoded user:", user);
+localStorage.setItem('userId', user.id); // ✅ Store userId for dashboard use
 
+<<<<<<< HEAD
+      const roleClaim = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+      const role = user[roleClaim]?.toLowerCase();
+
+      if (!role) {
+        this.message = 'Role not found in token. Cannot redirect.';
+        return;
+      }
+
+      console.log("User role:", role);
+
+      switch (role) {
+        case 'admin':
+          window.location.href = '/admin-dashboard';
+          break;
+        case 'customer':
+          window.location.href = '/customer-dashboard';
+          break;
+        case 'restaurant':
+          window.location.href = '/dashboard';
+          break;
+        case 'delivery agent':
+          window.location.href = '/delivery-dashboard';
+          break;
+        default:
+          this.message = 'Unknown role. Cannot redirect.';
+      }
+=======
  verifyOtp() {
   this.loginService.verifyOtp(this.email, this.otp).subscribe({
     next: (res: any) => {
@@ -76,6 +126,7 @@ error: (err: any) => {
         default:
           this.message = 'Unknown role. Cannot redirect.';
       }
+>>>>>>> 3d102429375c0c146c8055fa677e902fe1f050ab
     },
     error: (err: any) => {
       this.message =
@@ -85,4 +136,8 @@ error: (err: any) => {
     }
   });
 }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3d102429375c0c146c8055fa677e902fe1f050ab
 }
