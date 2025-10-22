@@ -4,7 +4,17 @@
 <div class="row">
 <div class="col-md-4 mb-4" *ngFor="let item of filteredItems">
 <div class="card h-100 shadow-sm">
-<img [src]="item.foodImage" class="card-img-top" alt="{{item.name}}" height="200">
+<!-- <img [src]="item.foodImage" class="card-img-top" alt="{{item.name}}" height="200"> -->
+<img
+  [src]="getImageUrl(item.foodImage)"
+  class="card-img-top"
+  alt="{{ item.name }}"
+  height="200"
+  (click)="openImage(getImageUrl(item.foodImage))"
+ 
+  style="cursor: pointer;"
+/>
+
 <div class="card-body">
 <h5 class="card-title">{{item.name}}</h5>
 <p class="card-text">{{item.description}}</p>

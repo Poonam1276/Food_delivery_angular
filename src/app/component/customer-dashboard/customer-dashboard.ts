@@ -13,6 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class CustomerDashboard {
  selectedItem: string = '';
+ orderStatus: string = 'Preparing'; // Possible values: 'Preparing', 'Out for Delivery', 'Delivered'
  menuItems = [
    { label: 'See All Menu Items', icon: 'bi bi-card-list' },
    { label: 'Order History', icon: 'bi bi-receipt-cutoff' },
@@ -34,7 +35,11 @@ selectItem(label: string) {
     this.router.navigate(['/menu']); // ✅ Redirect to menu page
     return;
   }
-
+if (label === 'Track Order') {
+  this.orderStatus = 'Preparing'; // Reset to initial status
+  setTimeout(() => this.orderStatus = 'Out for Delivery', 3000);
+  setTimeout(() => this.orderStatus = 'Delivered', 6000);
+}
   if (label === 'Update Profile') {
     const token = localStorage.getItem('authToken');
     if (token) {

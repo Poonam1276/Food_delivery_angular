@@ -43,30 +43,17 @@ export class AdminService {
 
   constructor(private http: HttpClient) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken') || '';
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  }
-
   getUnverifiedRestaurants(): Observable<Restaurant[]> {
-    return this.http.get<Restaurant[]>(`${this.baseUrl}/unverified/restaurants`, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.get<Restaurant[]>(`${this.baseUrl}/unverified/restaurants`);
   }
 
   getUnverifiedAgents(): Observable<any> {
-  return this.http.get<any>(`${this.baseUrl}/unverified/agents`, {
-    headers: this.getAuthHeaders()
-  });
+  return this.http.get<any>(`${this.baseUrl}/unverified/agents`);
 }
 
   verifyUser(userId: number, role: string): Observable<any> {
     const body = { userId, role };
-    return this.http.put(`${this.baseUrl}/verify`, body, {
-      headers: this.getAuthHeaders()
-    });
+    return this.http.put(`${this.baseUrl}/verify`, body);
   }
 
   getAllrestaurant(): Observable<Restaurant[]> {

@@ -59,7 +59,7 @@ error: (err: any) => {
       const role = res.role?.toLowerCase(); // assuming role is returned in response
       switch (role) {
         case 'admin':
-          window.location.href = '/admin-dashboard';
+          window.location.href = '/admin';
           break;
         case 'customer':
           const pinCode = localStorage.getItem('pinCode') || '';
