@@ -2,11 +2,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminService, Restaurant, DeliveryAgent } from '../../services/admin';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-dasboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './admin-dasboard.html',
   styleUrls: ['./admin-dasboard.css']
 })
@@ -26,7 +28,7 @@ export class AdminDasboard implements OnInit {
   unverifiedAgents: DeliveryAgent[] = [];
   loading: boolean = false;
 
-  constructor(private adminService: AdminService) {}
+  constructor(private router: Router,private adminService: AdminService) {}
 
   ngOnInit(): void {
     this.loadUnverifiedRestaurants();
@@ -137,5 +139,9 @@ openImage(imageUrl: string): void {
     })
   }
   
- 
+  logout() {
+   localStorage.removeItem('authToken');
+   alert('You have been logged out successfully.');
+   this.router.navigate(['/login']);
+ }
 }

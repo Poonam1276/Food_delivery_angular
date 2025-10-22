@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { signal, effect } from '@angular/core';
 
 export interface CartItem {
   cartItemId: number; // ✅ used for update/remove
