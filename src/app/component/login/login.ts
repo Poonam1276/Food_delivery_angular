@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {LoginService } from '../../services/login.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+ 
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -24,14 +24,14 @@ export class LoginComponent {
   private router: Router,
   private route: ActivatedRoute
 ) {}
-
-
-
+ 
+ 
+ 
 ngOnInit() {
   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/menu';
 }
-
-
+ 
+ 
   requestOtp() {
     this.loginService.requestOtp(this.email).subscribe({
       next: (res: any) => {
@@ -40,22 +40,22 @@ ngOnInit() {
           ? res
           : res.message || 'OTP sent successfully.';
       },
-      
+     
 error: (err: any) => {
   console.error('OTP Request Error:', err);
   this.message = err.error?.toString() || err.message || 'Failed to send OTP. Please try again.';
 }
-
+ 
     });
   }
-
+ 
  verifyOtp() {
   this.loginService.verifyOtp(this.email, this.otp).subscribe({
     next: (res: any) => {
       localStorage.setItem('authToken', res.token);
       this.authService.login(res.token); // ✅ notify navbar
       this.message = res.message || 'OTP verified successfully!';
-
+ 
       const role = res.role?.toLowerCase(); // assuming role is returned in response
       switch (role) {
         case 'admin':
@@ -86,3 +86,4 @@ error: (err: any) => {
   });
 }
 }
+ 

@@ -138,6 +138,20 @@ openImage(imageUrl: string): void {
     }
     })
   }
+
+  getImageUrl(path: string): string {
+  if (!path) return ''; // handle null or undefined
+
+  // If it's already a full URL, return as-is
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+
+  // Otherwise, assume it's a relative path from your backend
+  return 'https://localhost:7004' + path;
+}
+
+
   
   logout() {
    localStorage.removeItem('authToken');

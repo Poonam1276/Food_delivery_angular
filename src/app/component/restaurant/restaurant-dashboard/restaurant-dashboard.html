@@ -1,0 +1,131 @@
+ 
+<div class="restaurant-dashboard">
+  <aside class="sidebar d-flex flex-column align-items-center py-4">
+    <div class="profile text-center mb-4">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+        alt="Restaurant Profile"
+        class="profile-img rounded-circle mb-2"
+      />
+      <small class="text-light fw-bold">FoodZyaka</small>
+    </div>
+ 
+    <ul class="nav flex-column w-100">
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a class="nav-link text-light"
+           href="javascript:void(0)"
+           (click)="selectedItem = item.label"
+           [class.active]="selectedItem === item.label">
+          <i [class]="item.icon + ' me-2'"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+ 
+  <main class="main-content">
+    <div *ngIf="selectedItem === 'Welcome'" class="content-section">
+      <h3 class="section-title mb-4 text-swiggy">👋 Welcome to FoodZyaka</h3>
+      <p>Select an option from the sidebar to get started.</p>
+    </div>
+ 
+    <div *ngIf="selectedItem === 'Profile'" class="content-section">
+      <h3 class="section-title mb-4 text-swiggy">🏠 Restaurant Profile</h3>
+      <form *ngIf="form" [formGroup]="form" class="profile-form">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Address:</label>
+            <input formControlName="address" type="text" class="form-control" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Pin Code:</label>
+            <input formControlName="pinCode" type="text" class="form-control" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">FSSAI ID:</label>
+            <input formControlName="fssaiId" type="text" class="form-control" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Trade ID:</label>
+            <input formControlName="tradeId" type="text" class="form-control" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-swiggy mt-3" (click)="updateProfile()">Update Profile</button>
+      </form>
+      <p class="text-success mt-2">{{ message }}</p>
+    </div>
+ <div *ngIf="selectedItem === 'Manage Menu'" class="content-section">
+  <h3 class="section-title mb-4 text-swiggy">🍽️ Manage Menu</h3>
+  <button class="btn btn-sm btn-warning mb-3" (click)="openAddModal()">Add Menu Item</button>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Available</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of menuItemsList">
+        <td>{{ item.name }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.isAvailable ? 'Yes' : 'No' }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="editItem(item)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteItem(item.itemId)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="showAddModal" class="modal-backdrop">
+    <div class="modal-content p-4 bg-light rounded">
+      <h5>{{ isEditMode ? 'Edit Menu Item' : 'Add Menu Item' }}</h5>
+      <form [formGroup]="menuForm" (ngSubmit)="addMenuItem()">
+        <div class="mb-3">
+          <label>Name:</label>
+          <input formControlName="name" type="text" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label>Description:</label>
+          <textarea formControlName="description" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+          <label>Price:</label>
+          <input formControlName="price" type="number" class="form-control" />
+        </div>
+        <div class="mb-3">
+          <label>Category:</label>
+          <select formControlName="category" class="form-control">
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label>Available:</label>
+          <input formControlName="isAvailable" type="checkbox" />
+        </div>
+
+        <!-- Show file input only in Add mode -->
+        <div class="mb-3" *ngIf="!isEditMode">
+          <label>Food Image:</label>
+          <input type="file" (change)="onFileChange($event)" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-sm btn-warning me-2">
+          {{ isEditMode ? 'Update' : 'Add' }}
+        </button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="resetModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+</main>
+</div>
+ 
+ 

@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import { CustomerService } from '../../services/customer';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OrderHistoryDto } from '../../services/customer'; // or from '../../models/order-history.dto'
 
 @Component({
   selector: 'app-customer-dashboard',
@@ -12,10 +13,11 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './customer-dashboard.html',
   styleUrls: ['./customer-dashboard.css']
 })
+
 export class CustomerDashboard {
   selectedItem: string = '';
   orderStatus: string = 'Preparing';
-  orderHistory: any[] = [];
+    orderHistory: OrderHistoryDto[] = [];
 trackedOrder: any = null;
 inputOrderId: string = '';
   menuItems = [
@@ -40,14 +42,20 @@ inputOrderId: string = '';
       return;
     }
 
+
 if (label === 'Order History') {
     this.customerService.getOrderHistory().subscribe({
-      next: (res: any[]) => {
-        this.orderHistory = res;
+      next: (res) => {
+        console.log('Order history response:', res);
+        this.orderHistory = res.$values ?? [];
       },
-      error: () => alert('Failed to load order history.')
+      error: (err) => {
+        console.error('Error fetching order history:', err);
+        alert('Failed to load order history.');
+      }
     });
   }
+
 
  if (label === 'Track Order') {
   this.trackedOrder = null;
@@ -116,29 +124,33 @@ trackOrderById() {
   }
 
   this.customerService.trackOrder(orderId).subscribe({
-    next: (res: any) => {
-      this.trackedOrder = res;
-      this.orderStatus = res.status;
-    },
-    error: () => {
-      alert('Order not found or unable to track.');
-      this.trackedOrder = null;
-    }
-  });
+  next: (res: any) => {
+    console.log('Track order response:', res);
+    this.trackedOrder = res;
+    this.orderStatus = res.status;
+  },
+  error: (err) => {
+    console.error('Track order error:', err);
+    alert('Order not found or unable to track.');
+    this.trackedOrder = null;
+  }
+});
 }
 toggleDetails(order: any) {
  order.showDetails = !order.showDetails;
 }
+
 ngOnInit() {
- this.customerService.getOrderHistory().subscribe({
-   next: (res: any) => {
-     this.orderHistory = res;; // since your API returns $values
-   },
-   error: (err) => {
-     console.error('Error fetching order history:', err);
-   }
- });
+  this.customerService.getOrderHistory().subscribe({
+    next: (res) => {
+      this.orderHistory = res.$values ?? [];
+    },
+    error: (err) => {
+      console.error('Error fetching order history:', err);
+    }
+  });
 }
+
   logout() {
     localStorage.removeItem('authToken');
     alert('You have been logged out successfully.');

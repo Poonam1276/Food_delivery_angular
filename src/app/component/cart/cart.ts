@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -119,13 +118,7 @@ export class CartComponent implements OnInit {
     this.couponCode = '';
   }
 
-  // checkout() {
-  //   if (!this.cartId) {
-  //     alert('Cart ID not found. Please try again.');
-  //     return;
-  //   }
-  //   this.router.navigate(['/order'], { queryParams: { cartId: this.cartId } });
-  // }
+ 
   checkout(cart: any) {
   if (!cart.cartId) {
     alert('Cart ID not found. Please try again.');

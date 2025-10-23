@@ -39,106 +39,107 @@
       </p>
       <div *ngIf="selectedItem === 'Track Order'" class="track-order-section mt-4">
         <!-- Track Order Section -->
-  <div *ngIf="selectedItem === 'Track Order'" class="track-order-page mt-4">
-  <div class="mb-3">
-    <label for="orderIdInput" class="form-label fw-semibold">Enter Order ID to Track:</label>
-    <input type="text" id="orderIdInput" class="form-control w-50 mx-auto" [(ngModel)]="inputOrderId" placeholder="e.g. 12345" />
-    <button class="btn btn-orange mt-2" (click)="trackOrderById()">Track Order</button>
-  </div>
+        <div class="mb-3">
+          <label for="orderIdInput" class="form-label fw-semibold">Enter Order ID to Track:</label>
+          <input type="text" id="orderIdInput" class="form-control w-50 mx-auto" [(ngModel)]="inputOrderId"
+            placeholder="e.g. 12345" />
+          <button class="btn btn-orange mt-2" (click)="trackOrderById()">Track Order</button>
+        </div>
 
-  <div *ngIf="trackedOrder" class="track-order-card shadow-lg rounded-4 p-4 mt-4">
-    <div class="order-summary mb-4">
-      <p><strong>Order ID:</strong> #{{ trackedOrder.orderId }}</p>
-      <p><strong>Placed On:</strong> {{ trackedOrder.placedOn | date:'medium' }}</p>
-      <p><strong>Estimated Delivery:</strong> {{ trackedOrder.estimatedDelivery }}</p>
-    </div>
+        <div *ngIf="trackedOrder" class="track-order-card shadow-lg rounded-4 p-4 mt-4">
+          <div class="order-summary mb-4">
+            <p><strong>Order ID:</strong> #{{ trackedOrder.orderId }}</p>
+            <p><strong>Placed On:</strong> {{ trackedOrder.placedOn | date:'medium' }}</p>
+            <p><strong>Estimated Delivery:</strong> {{ trackedOrder.estimatedDelivery }}</p>
+          </div>
 
-    <div class="timeline-container position-relative d-flex justify-content-between align-items-center">
-      <div class="step" [class.active]="orderStatus === 'Preparing' || orderStatus === 'Out for Delivery' || orderStatus === 'Delivered'">
-        <div class="circle"><i class="bi bi-egg-fried"></i></div>
-        <p>Preparing</p>
-      </div>
-      <div class="step" [class.active]="orderStatus === 'Out for Delivery' || orderStatus === 'Delivered'">
-        <div class="circle"><i class="bi bi-truck"></i></div>
-        <p>Out for Delivery</p>
-      </div>
-      <div class="step" [class.active]="orderStatus === 'Delivered'">
-        <div class="circle"><i class="bi bi-check-circle"></i></div>
-        <p>Delivered</p>
-      </div>
-      <div class="line"></div>
-    </div>
+          <div class="timeline-container position-relative d-flex justify-content-between align-items-center">
+            <div class="step"
+              [class.active]="orderStatus === 'Preparing' || orderStatus === 'Out for Delivery' || orderStatus === 'Delivered'">
+              <div class="circle"><i class="bi bi-egg-fried"></i></div>
+              <p>Preparing</p>
+            </div>
+            <div class="step" [class.active]="orderStatus === 'Out for Delivery' || orderStatus === 'Delivered'">
+              <div class="circle"><i class="bi bi-truck"></i></div>
+              <p>Out for Delivery</p>
+            </div>
+            <div class="step" [class.active]="orderStatus === 'Delivered'">
+              <div class="circle"><i class="bi bi-check-circle"></i></div>
+              <p>Delivered</p>
+            </div>
+            <div class="line"></div>
+          </div>
 
-    <div class="text-center mt-4">
-      <span class="badge rounded-pill px-4 py-2 fs-6"
-        [ngClass]="{
+          <div class="text-center mt-4">
+            <span class="badge rounded-pill px-4 py-2 fs-6" [ngClass]="{
           'bg-secondary': orderStatus === 'Preparing',
           'bg-warning text-dark': orderStatus === 'Out for Delivery',
           'bg-success': orderStatus === 'Delivered'
         }">
-        {{ orderStatus | titlecase }}
-      </span>
-    </div>
-  </div>
-</div>
-
-
+              {{ orderStatus | titlecase }}
+            </span>
+          </div>
+        </div>
       </div>
-<div *ngIf="selectedItem === 'Order History'" class="order-history-section mt-4">
-<h3 class="fw-bold text-center mb-4 text-orange">Your Orders</h3>
-<!-- Orders List -->
-<div *ngIf="orderHistory && orderHistory.length > 0; else noOrders">
-<div class="order-list">
-<div *ngFor="let order of orderHistory" class="order-card shadow-sm p-4 rounded">
-<!-- Order Summary -->
-<div class="order-header d-flex justify-content-between align-items-center">
-<div>
-<h5 class="fw-semibold mb-1">Order #{{ order.orderId }}</h5>
-<p class="text-muted mb-0">
-<i class="bi bi-shop me-2 text-teal"></i>{{ order.restaurantName }}
-</p>
-</div>
-<div class="text-end">
-<span class="status-badge" [ngClass]="{
-             'delivered': order.status === 'Delivered',
-             'out': order.status === 'OutForDelivery',
-             'preparing': order.status === 'Preparing'
-           }">
-             {{ order.status }}
-</span>
-<p class="fw-semibold text-blue mb-0">₹{{ order.totalAmount }}</p>
-</div>
-</div>
-<!-- Order Date -->
-<p class="text-muted mt-2 mb-2">
-<i class="bi bi-calendar-event me-2 text-orange"></i>{{ order.orderDate | date: "medium" }}
-</p>
-<!-- View More -->
-<div class="text-end">
-<button class="btn btn-outline-primary btn-sm" (click)="toggleDetails(order)">
-           {{ order.showDetails ? 'Hide Details' : 'View More Details' }}
-</button>
-</div>
-<!-- Expanded Details -->
-<div *ngIf="order.showDetails" class="order-details mt-3 p-3 rounded">
-<h6 class="fw-semibold text-orange mb-2">Order Summary</h6>
-<p><strong>Order ID:</strong> {{ order.orderId }}</p>
-<p><strong>Status:</strong> {{ order.status }}</p>
-<p><strong>Restaurant:</strong> {{ order.restaurantName }}</p>
-<p><strong>Total Amount:</strong> ₹{{ order.totalAmount }}</p>
-<p><strong>Order Date:</strong> {{ order.orderDate | date: 'medium' }}</p>
-</div>
-</div>
-</div>
-</div>
-<!-- No Orders Found -->
-<ng-template #noOrders>
-<div class="no-orders text-center mt-5">
-<i class="bi bi-bag-x text-muted fs-1"></i>
-<p class="mt-3 fw-semibold text-muted">You haven't placed any orders yet.</p>
-</div>
-</ng-template>
-</div>
+      <div *ngIf="selectedItem === 'Order History'" class="order-history-section mt-4">
+        <h3 class="fw-bold text-center mb-4 text-orange">Your Orders</h3>
+
+        <!-- Orders List -->
+        <div *ngIf="orderHistory && orderHistory.length > 0; else noOrders">
+          <div class="order-list">
+            <div *ngFor="let order of orderHistory" class="order-card shadow-sm p-4 rounded">
+              <!-- Order Header -->
+              <div class="order-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="fw-semibold mb-1 text-dark">Order #{{ order.orderId }}</h5>
+                  <p class="text-muted mb-0">
+                    <i class="bi bi-shop me-2 text-teal"></i>{{ order.restaurantName }}
+                  </p>
+                </div>
+                <div class="text-end">
+                  <span class="status-badge" [ngClass]="{
+               'delivered': order.status === 'Delivered',
+               'out': order.status === 'OutForDelivery',
+               'preparing': order.status === 'Preparing'
+             }">
+                    {{ order.status }}
+                  </span>
+                  <p class="fw-semibold text-blue mt-2">₹{{ order.totalAmount }}</p>
+                </div>
+              </div>
+              <!-- Order Date -->
+              <p class="text-muted mt-2 mb-3">
+                <i class="bi bi-calendar-event me-2 text-orange"></i>
+                {{ order.orderDate | date: "medium" }}
+              </p>
+              <!-- View Details -->
+              <div class="text-end">
+                <button class="btn btn-outline-primary btn-sm" (click)="toggleDetails(order)">
+                  {{ order.showDetails ? 'Hide Details' : 'View More Details' }}
+                </button>
+              </div>
+              <!-- Expanded Details -->
+              <div *ngIf="order.showDetails" class="order-details mt-3 p-3 rounded">
+                <h6 class="fw-semibold text-orange mb-2">Order Summary</h6>
+                <p><strong>Order ID:</strong> {{ order.orderId }}</p>
+                <p><strong>Status:</strong> {{ order.status }}</p>
+                <p><strong>Restaurant:</strong> {{ order.restaurantName }}</p>
+                <p><strong>Total Amount:</strong> ₹{{ order.totalAmount }}</p>
+                <p><strong>Order Date:</strong> {{ order.orderDate | date: 'medium' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- No Orders Found -->
+        <ng-template #noOrders>
+          <div class="no-orders text-center mt-5">
+            <i class="bi bi-bag-x text-muted fs-1"></i>
+            <p class="mt-3 fw-semibold text-muted">
+              You haven't placed any orders yet.
+            </p>
+          </div>
+        </ng-template>
+      </div>
       <!-- Update Profile Form -->
       <div *ngIf="selectedItem === 'Update Profile'"
         class="update-profile-section d-flex justify-content-center align-items-center mt-4">

@@ -43,18 +43,12 @@ export class CartService {
 
  
  addToCart(item: any): Observable<any> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
-
     const payload = {
       itemId: item.itemId || item.id,
       quantity: 1
     };
 
-    return this.http.post(`${this.baseUrl}/add`, payload, { headers });
+    return this.http.post(`${this.baseUrl}/add`, payload);
   }
 
 
@@ -66,35 +60,22 @@ export class CartService {
    this.cartCount.next(0);
  }
   getCustomerCart(): Observable<CartResponse> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
 
-    return this.http.get<CartResponse>(`${this.baseUrl}/customer-carts`, { headers });
+    return this.http.get<CartResponse>(`${this.baseUrl}/customer-carts`);
   }
 
   removeItem(cartItemId: number): Observable<any> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    return this.http.delete(`${this.baseUrl}/remove-item/${cartItemId}`, { headers , responseType:'text' as 'json'});
+  return this.http.delete(`${this.baseUrl}/remove-item/${cartItemId}`);
   }
-
+// , { headers , responseType:'text' as 'json'}
   updateQuantity(cartItemId: number, quantity: number): Observable<any> {
-  const token = localStorage.getItem('authToken');
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
 
   const body = {
     cartItemId: cartItemId,
     quantity: quantity
   };
 
-  return this.http.put(`${this.baseUrl}/update-quantity`, body, { headers,responseType:'text' as 'json' });
+  return this.http.put(`${this.baseUrl}/update-quantity`, body);
 }
 
  updateCartCount(count: number) {
