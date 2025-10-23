@@ -1,167 +1,185 @@
 <div class="customer-dashboard">
-<!-- Sidebar -->
-<aside class="sidebar d-flex flex-column align-items-center py-4">
-<!-- Profile Section -->
-<div class="profile text-center mb-4">
-<img
-       src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
-       alt="Customer Profile"
-       class="profile-img mb-2"
-     />
-<h5 class="text-white fw-semibold mb-0">Hi, Foodie!</h5>
-<small class="text-light">Welcome to FoodZyaka</small>
-</div>
-<!-- Navigation -->
-<ul class="nav flex-column w-100">
-<li
-       class="nav-item"
-       *ngFor="let item of menuItems"
-       (click)="selectItem(item.label)"
->
-<a
-  href="#"
-  (click)="$event.preventDefault(); selectItem(item.label)"
-  class="nav-link d-flex align-items-center px-3 py-2"
-  [class.active]="selectedItem === item.label"
->
-<i [class]="item.icon + ' me-2'"></i>
-<span>{{ item.label }}</span>
-</a>
-</li>
-</ul>
-<!-- Logout Button -->
-<div class="logout mt-auto mb-3">
-<button class="btn btn-light text-danger fw-semibold" (click)="logout()">
-<i class="bi bi-box-arrow-right me-2"></i>Logout
-</button>
-</div>
-</aside>
-<!-- Track Order Section -->
+  <!-- Sidebar -->
+  <aside class="sidebar d-flex flex-column align-items-center py-4">
+    <!-- Profile Section -->
+    <div class="profile text-center mb-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Customer Profile"
+        class="profile-img mb-2" />
+      <h5 class="text-white fw-semibold mb-0">Hi, Foodie!</h5>
+      <small class="text-light">Welcome to FoodZyaka</small>
+    </div>
+    <!-- Navigation -->
+    <ul class="nav flex-column w-100">
+      <li class="nav-item" *ngFor="let item of menuItems" (click)="selectItem(item.label)">
+        <a href="#" (click)="$event.preventDefault(); selectItem(item.label)"
+          class="nav-link d-flex align-items-center px-3 py-2" [class.active]="selectedItem === item.label">
+          <i [class]="item.icon + ' me-2'"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+    <!-- Logout Button -->
+    <div class="logout mt-auto mb-3">
+      <button class="btn btn-light text-danger fw-semibold" (click)="logout()">
+        <i class="bi bi-box-arrow-right me-2"></i>Logout
+      </button>
+    </div>
+  </aside>
+  <!-- Track Order Section -->
 
-<!-- Main Content -->
-<main class="main-content">
-  <div class="content text-center">
-    <h3 class="fw-bold text-orange">
-      {{ selectedItem || 'Welcome to Your Dashboard!' }}
-    </h3>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content text-center">
+      <h3 class="fw-bold text-orange">
+        {{ selectedItem || 'Welcome to Your Dashboard!' }}
+      </h3>
 
-    <p class="text-muted" *ngIf="!selectedItem">
-      Select an option from the sidebar to explore your dashboard.
-    </p>
-    <div *ngIf="selectedItem === 'Track Order'" class="track-order-section mt-4">
-  <div class="container-fluid py-4">
-    <div class="row justify-content-center">
-      <div class="col-lg-10 col-md-11 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-4 p-4">
-          <h3 class="text-center fw-bold mb-5" style="color: #fc8019;">Order Tracking</h3>
- 
-          <div class="order-status-timeline d-flex justify-content-between align-items-center position-relative">
-            <!-- Step 1 -->
-            <div class="step" [class.active]="orderStatus === 'preparing' || orderStatus === 'outForDelivery' || orderStatus === 'delivered'">
-              <div class="circle">
-                <i class="bi bi-egg-fried"></i>
-              </div>
+      <p class="text-muted" *ngIf="!selectedItem">
+        Select an option from the sidebar to explore your dashboard.
+      </p>
+      <div *ngIf="selectedItem === 'Track Order'" class="track-order-section mt-4">
+        <!-- Track Order Section -->
+        <div class="mb-3">
+          <label for="orderIdInput" class="form-label fw-semibold">Enter Order ID to Track:</label>
+          <input type="text" id="orderIdInput" class="form-control w-50 mx-auto" [(ngModel)]="inputOrderId"
+            placeholder="e.g. 12345" />
+          <button class="btn btn-orange mt-2" (click)="trackOrderById()">Track Order</button>
+        </div>
+
+        <div *ngIf="trackedOrder" class="track-order-card shadow-lg rounded-4 p-4 mt-4">
+          <div class="order-summary mb-4">
+            <p><strong>Order ID:</strong> #{{ trackedOrder.orderId }}</p>
+            <p><strong>Placed On:</strong> {{ trackedOrder.placedOn | date:'medium' }}</p>
+            <p><strong>Estimated Delivery:</strong> {{ trackedOrder.estimatedDelivery }}</p>
+          </div>
+
+          <div class="timeline-container position-relative d-flex justify-content-between align-items-center">
+            <div class="step"
+              [class.active]="orderStatus === 'Preparing' || orderStatus === 'Out for Delivery' || orderStatus === 'Delivered'">
+              <div class="circle"><i class="bi bi-egg-fried"></i></div>
               <p>Preparing</p>
             </div>
- 
-            <!-- Step 2 -->
-            <div class="step" [class.active]="orderStatus === 'outForDelivery' || orderStatus === 'delivered'">
-              <div class="circle">
-                <i class="bi bi-truck"></i>
-              </div>
+            <div class="step" [class.active]="orderStatus === 'Out for Delivery' || orderStatus === 'Delivered'">
+              <div class="circle"><i class="bi bi-truck"></i></div>
               <p>Out for Delivery</p>
             </div>
- 
-            <!-- Step 3 -->
-            <div class="step" [class.active]="orderStatus === 'delivered'">
-              <div class="circle">
-                <i class="bi bi-check-circle"></i>
-              </div>
+            <div class="step" [class.active]="orderStatus === 'Delivered'">
+              <div class="circle"><i class="bi bi-check-circle"></i></div>
               <p>Delivered</p>
             </div>
- 
-            <!-- Line connector -->
             <div class="line"></div>
           </div>
- 
-          <div class="text-center mt-5">
-            <span class="badge rounded-pill px-4 py-2 fs-6"
-              [ngClass]="{
-                'bg-secondary': orderStatus === 'preparing',
-                'bg-warning text-dark': orderStatus === 'outForDelivery',
-                'bg-success': orderStatus === 'delivered'
-              }">
+
+          <div class="text-center mt-4">
+            <span class="badge rounded-pill px-4 py-2 fs-6" [ngClass]="{
+          'bg-secondary': orderStatus === 'Preparing',
+          'bg-warning text-dark': orderStatus === 'Out for Delivery',
+          'bg-success': orderStatus === 'Delivered'
+        }">
               {{ orderStatus | titlecase }}
             </span>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+      <div *ngIf="selectedItem === 'Order History'" class="order-history-section mt-4">
+        <h3 class="fw-bold text-center mb-4 text-orange">Your Orders</h3>
 
-
-    <!-- Update Profile Form -->
-    <div *ngIf="selectedItem === 'Update Profile'" class="update-profile-section d-flex justify-content-center align-items-center mt-4">
-<div class="update-card shadow-lg p-4 rounded-4">
-<div class="text-center mb-4">
-<img
-       src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-       alt="Profile Icon"
-       class="profile-icon mb-2"
-     />
-<h4 class="fw-bold text-orange mb-1">Update Your Profile</h4>
-<p class="text-muted">Keep your information up to date for a personalized experience.</p>
-</div>
-<form (ngSubmit)="updateProfile()" class="update-form">
-<div class="row">
-<div class="col-md-6 mb-3">
-<label class="form-label fw-semibold">Full Name</label>
-<input
-           type="text"
-           class="form-control"
-           [(ngModel)]="user.name"
-           name="name"
-           placeholder="Enter your full name"
-           required
-         />
-</div>
-<div class="col-md-6 mb-3">
-<label class="form-label fw-semibold">Email Address</label>
-<input
-           type="email"
-           class="form-control"
-           [(ngModel)]="user.email"
-           name="email"
-           placeholder="you@example.com"
-           required
-           readonly
-         />
-</div>
-<div class="col-md-6 mb-3">
-<label class="form-label fw-semibold">Phone Number</label>
-<input
-           type="text"
-           class="form-control"
-           [(ngModel)]="user.phone"
-           name="phone"
-           placeholder="+91 XXXXX XXXXX"
-           required
-         />
-</div>
-</div>
-<div class="text-center mt-4">
-<button type="submit" class="btn btn-orange px-4 py-2 fw-semibold">
-<i class="bi bi-save me-2"></i>Save Changes
-</button>
-</div>
-</form>
-</div>
-</div>
-    <!-- Other Sections -->
-    <div *ngIf="selectedItem && selectedItem !== 'Update Profile'" class="mt-3 text-secondary">
-      You have selected <strong>{{ selectedItem }}</strong> section.
+        <!-- Orders List -->
+        <div *ngIf="orderHistory && orderHistory.length > 0; else noOrders">
+          <div class="order-list">
+            <div *ngFor="let order of orderHistory" class="order-card shadow-sm p-4 rounded">
+              <!-- Order Header -->
+              <div class="order-header d-flex justify-content-between align-items-center">
+                <div>
+                  <h5 class="fw-semibold mb-1 text-dark">Order #{{ order.orderId }}</h5>
+                  <p class="text-muted mb-0">
+                    <i class="bi bi-shop me-2 text-teal"></i>{{ order.restaurantName }}
+                  </p>
+                </div>
+                <div class="text-end">
+                  <span class="status-badge" [ngClass]="{
+               'delivered': order.status === 'Delivered',
+               'outfordelivery': order.status === 'OutForDelivery',
+               'preparing': order.status === 'Preparing'
+             }">
+                    {{ order.status }}
+                  </span>
+                  <p class="fw-semibold text-blue mt-2">₹{{ order.totalAmount }}</p>
+                </div>
+              </div>
+              <!-- Order Date -->
+              <p class="text-muted mt-2 mb-3">
+                <i class="bi bi-calendar-event me-2 text-orange"></i>
+                {{ order.orderDate | date: "medium" }}
+              </p>
+              <!-- View Details -->
+              <div class="text-end">
+                <button class="btn btn-outline-primary btn-sm" (click)="toggleDetails(order)">
+                  {{ order.showDetails ? 'Hide Details' : 'View More Details' }}
+                </button>
+              </div>
+              <!-- Expanded Details -->
+              <div *ngIf="order.showDetails" class="order-details mt-3 p-3 rounded">
+                <h6 class="fw-semibold text-orange mb-2">Order Summary</h6>
+                <p><strong>Order ID:</strong> {{ order.orderId }}</p>
+                <p><strong>Status:</strong> {{ order.status }}</p>
+                <p><strong>Restaurant:</strong> {{ order.restaurantName }}</p>
+                <p><strong>Total Amount:</strong> ₹{{ order.totalAmount }}</p>
+                <p><strong>Order Date:</strong> {{ order.orderDate | date: 'medium' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- No Orders Found -->
+        <ng-template #noOrders>
+          <div class="no-orders text-center mt-5">
+            <i class="bi bi-bag-x text-muted fs-1"></i>
+            <p class="mt-3 fw-semibold text-muted">
+              You haven't placed any orders yet.
+            </p>
+          </div>
+        </ng-template>
+      </div>
+      <!-- Update Profile Form -->
+      <div *ngIf="selectedItem === 'Update Profile'"
+        class="update-profile-section d-flex justify-content-center align-items-center mt-4">
+        <div class="update-card shadow-lg p-4 rounded-4">
+          <div class="text-center mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile Icon"
+              class="profile-icon mb-2" />
+            <h4 class="fw-bold text-orange mb-1">Update Your Profile</h4>
+            <p class="text-muted">Keep your information up to date for a personalized experience.</p>
+          </div>
+          <form (ngSubmit)="updateProfile()" class="update-form">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Full Name</label>
+                <input type="text" class="form-control" [(ngModel)]="user.name" name="name"
+                  placeholder="Enter your full name" required />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Email Address</label>
+                <input type="email" class="form-control" [(ngModel)]="user.email" name="email"
+                  placeholder="you@example.com" required readonly />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Phone Number</label>
+                <input type="text" class="form-control" [(ngModel)]="user.phone" name="phone"
+                  placeholder="+91 XXXXX XXXXX" required />
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <button type="submit" class="btn btn-orange px-4 py-2 fw-semibold">
+                <i class="bi bi-save me-2"></i>Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Other Sections -->
+      <div *ngIf="selectedItem && selectedItem !== 'Update Profile'" class="mt-3 text-secondary">
+        You have selected <strong>{{ selectedItem }}</strong> section.
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 </div>

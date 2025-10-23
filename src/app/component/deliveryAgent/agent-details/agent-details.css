@@ -1,0 +1,54 @@
+/* Container and card styling */
+.container {
+  margin-top: 60px;
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  background-color: #fefefe;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Header styling */
+.card-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* Form labels and inputs */
+.form-label {
+  font-weight: 600;
+  color: #34495e;
+}
+
+.form-control {
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Submit button */
+.btn-primary {
+  background: linear-gradient(90deg, #fc8019, #ff944d);
+  border: none;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(90deg, #e56f0c, #ff7f2a);
+}
+
+/* Success and error messages */
+.alert {
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* Image styling */
+.agent-image {
+  display: block;
+  margin: 0 auto 20px auto;
+  max-width: 120px;
+  border-radius: 50%;
+}

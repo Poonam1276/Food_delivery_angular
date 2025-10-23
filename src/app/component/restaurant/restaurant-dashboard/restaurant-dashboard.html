@@ -202,12 +202,13 @@
       <td>{{ order.customerName }}</td>
       <td>
         <select
-          class="form-select form-select-sm w-auto"
-          [ngModel]="order.status"
-          (ngModelChange)="onStatusChange(order, $event)"
-        >
-          <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
-        </select>
+  class="form-select form-select-sm w-auto"
+  [(ngModel)]="order.status"
+  (ngModelChange)="onStatusChange(order, order.status)"
+>
+  <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+</select>
+
       </td>
       <td>
         <button class="btn btn-sm btn-swiggy" (click)="openOrderDetails(order)">View Details</button>

@@ -41,7 +41,7 @@ filterDate: string = '';
 filterMonth: string = '';
 filterItemName: string = '';
 
-statusOptions: string[] = ['Order Placed', 'Preparing Order', 'Out for delivery', 'Delivered'];
+statusOptions: string[] = ['Order Placed', 'Preparing', 'Out for Delivery','Delivered'];
 
 
 months = [
@@ -174,7 +174,7 @@ loadOrders(): void {
 
 
 openOrderDetails(order: RestaurantOrderViewDto): void {
-  this.selectedOrder = order;
+  this.selectedOrder = order; 
 }
 
 closeOrderDetails(): void {

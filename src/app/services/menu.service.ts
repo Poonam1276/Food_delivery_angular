@@ -8,12 +8,12 @@ import { Observable } from 'rxjs';
 export class MenuService {
   baseUrl = 'https://localhost:7004/api/MenuItem/search-by-pincode';
 
-  constructor(private http: HttpClient) {}
-
+  constructor(private http: HttpClient) {}   
   getMenuItems(pinCode: string): Observable<any> {
     const params = new HttpParams().set('pinCode', pinCode);
     return this.http.get(this.baseUrl, {params} );
   }
+
   searchByFilters(
   pinCode: string,
   restaurantName?: string,

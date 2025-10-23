@@ -32,7 +32,16 @@
 .profile-img:hover {
   transform: scale(1.05);
 }
- 
+ /* Logout button */
+.logout button {
+ border: none;
+ padding: 8px 20px;
+ border-radius: 20px;
+ transition: all 0.3s ease;
+}
+.logout button:hover {
+ background-color: #ffe0b2;
+}
 /* Navigation */
 .nav {
   list-style: none;

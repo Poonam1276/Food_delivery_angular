@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-
-
+ 
+ 
 @Component({
   selector: 'app-root',
   imports: [ RouterOutlet, RouterModule],
@@ -11,6 +11,3 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title = signal('my-angular-app');
 }
-
-
-
