@@ -1,4 +1,3 @@
- 
 <div class="restaurant-dashboard">
   <aside class="sidebar d-flex flex-column align-items-center py-4">
     <div class="profile text-center mb-4">
@@ -6,13 +5,14 @@
         src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
         alt="Restaurant Profile"
         class="profile-img rounded-circle mb-2"
-      />
-      <small class="text-light fw-bold">FoodZyaka</small>
-    </div>
+      /><h5 class="text-white fw-semibold mb-0">Food Zyaka</h5>
+        </div>
+      <!-- <small class="text-light fw-bold">FoodZyaka</small> -->
+  
  
     <ul class="nav flex-column w-100">
       <li class="nav-item" *ngFor="let item of menuItems">
-        <a class="nav-link text-light"
+        <a class="nav-link "
            href="javascript:void(0)"
            (click)="selectedItem = item.label"
            [class.active]="selectedItem === item.label">
@@ -21,41 +21,64 @@
         </a>
       </li>
     </ul>
+    <div class="logout mt-auto mb-3">
+<button class="btn btn-light text-danger fw-semibold" (click)="logout()">
+<i class="bi bi-box-arrow-right me-2"></i>Logout
+</button>
+</div>
   </aside>
  
   <main class="main-content">
-    <div *ngIf="selectedItem === 'Welcome'" class="content-section">
+    <div *ngIf="selectedItem === ''" class="content-section blank-space text-center text-muted d-flex flex-column justify-content-center align-items-center">
       <h3 class="section-title mb-4 text-swiggy">👋 Welcome to FoodZyaka</h3>
       <p>Select an option from the sidebar to get started.</p>
     </div>
  
-    <div *ngIf="selectedItem === 'Profile'" class="content-section">
-      <h3 class="section-title mb-4 text-swiggy">🏠 Restaurant Profile</h3>
-      <form *ngIf="form" [formGroup]="form" class="profile-form">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Address:</label>
-            <input formControlName="address" type="text" class="form-control" />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Pin Code:</label>
-            <input formControlName="pinCode" type="text" class="form-control" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">FSSAI ID:</label>
-            <input formControlName="fssaiId" type="text" class="form-control" />
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Trade ID:</label>
-            <input formControlName="tradeId" type="text" class="form-control" />
-          </div>
-        </div>
-        <button type="button" class="btn btn-swiggy mt-3" (click)="updateProfile()">Update Profile</button>
-      </form>
-      <p class="text-success mt-2">{{ message }}</p>
+    <div *ngIf="selectedItem === 'Profile'" class="content-section d-flex justify-content-center align-items-center mt-4">
+  <div class="update-card shadow-lg p-4 rounded-4 w-100" style="max-width: 800px;">
+    <div class="text-center mb-4">
+    <img
+       src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+       alt="Profile Icon"
+       class="profile-icon mb-2"
+     />
+       <p>Update your restaurant details to keep your profile accurate.</p>
     </div>
+<div class="d-flex justify-content-center align-items-center mt-4">
+  <div class="update-card shadow-lg p-4 rounded-4 w-100" style="max-width: 800px;">
+    <form *ngIf="form" [formGroup]="form" class="profile-form">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold">Address:</label>
+          <input formControlName="address" type="text" class="form-control" placeholder="Enter address" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold">Pin Code:</label>
+          <input formControlName="pinCode" type="text" class="form-control" placeholder="Enter pin code" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold">FSSAI ID:</label>
+          <input formControlName="fssaiId" type="text" class="form-control" placeholder="Enter FSSAI ID" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-semibold">Trade ID:</label>
+          <input formControlName="tradeId" type="text" class="form-control" placeholder="Enter Trade ID" />
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <button type="button" class="btn btn-orange px-4 py-2 fw-semibold" (click)="updateProfile()">
+          <i class="bi bi-save me-2"></i>Update Profile
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+    <!-- <p class="text-success mt-3 text-center">{{ message }}</p> -->
+  </div>
+</div>
  <div *ngIf="selectedItem === 'Manage Menu'" class="content-section">
   <h3 class="section-title mb-4 text-swiggy">🍽️ Manage Menu</h3>
   <button class="btn btn-sm btn-warning mb-3" (click)="openAddModal()">Add Menu Item</button>
@@ -67,6 +90,7 @@
         <th>Category</th>
         <th>Price</th>
         <th>Available</th>
+        <th>Images</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -77,8 +101,19 @@
         <td>{{ item.price }}</td>
         <td>{{ item.isAvailable ? 'Yes' : 'No' }}</td>
         <td>
+  <img
+    [src]="getImageUrl(item.foodImage!)"
+    class="card-img-top"
+    alt="{{ item.name }}"
+    height="100"
+    (click)="openImage(getImageUrl(item.foodImage!))"
+    style="cursor: pointer; max-width: 100px; object-fit: cover;"
+  />
+</td>
+        
+        <td>
           <button class="btn btn-sm btn-warning me-2" (click)="editItem(item)">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteItem(item.itemId)">Delete</button>
+          <!-- <button class="btn btn-sm btn-danger" (click)="deleteItem(item.itemId)">Delete</button> -->
         </td>
       </tr>
     </tbody>
@@ -125,6 +160,94 @@
     </div>
   </div>
 </div>
+<div *ngIf="selectedItem === 'View Orders'" class="content-section">
+ <div class="filters mb-3 d-flex flex-wrap gap-3 align-items-end">
+  <select class="form-select w-auto" [(ngModel)]="filterStatus">
+    <option value="">All Statuses</option>
+    <option value="Order Placed">Order Placed</option>
+    <option value="Preparing Order">Preparing Order</option>
+    <option value="Out for delivery">Out for delivery</option>
+    <option value="Delivered">Delivered</option>
+  </select>
+
+  <input type="date" class="form-control w-auto" [(ngModel)]="filterDate" />
+
+  <select class="form-select w-auto" [(ngModel)]="filterMonth">
+    <option value="">All Months</option>
+    <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+  </select>
+
+  <input type="text" class="form-control w-auto" placeholder="Search Menu Item" [(ngModel)]="filterItemName" />
+
+<button class="btn btn-swiggy mt-3" (click)="clearFilters()">Clear Filters</button>
+</div>
+
+<div class="mb-3">
+  <p class="fw-semibold text-dark mb-1">Total Orders: {{ orderStats.totalOrders }}</p>
+  <p *ngIf="filterItemName" class="fw-semibold text-dark">Total Quantity of "{{ filterItemName }}": {{ orderStats.totalQuantity }}</p>
+</div>
+
+<table class="table table-bordered table-hover shadow-sm">
+  <thead class="table-swiggy">
+    <tr>
+      <th>Order ID</th>
+      <th>Customer Name</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of filteredOrders">
+      <td>{{ order.orderId }}</td>
+      <td>{{ order.customerName }}</td>
+      <td>
+        <select
+          class="form-select form-select-sm w-auto"
+          [ngModel]="order.status"
+          (ngModelChange)="onStatusChange(order, $event)"
+        >
+          <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+        </select>
+      </td>
+      <td>
+        <button class="btn btn-sm btn-swiggy" (click)="openOrderDetails(order)">View Details</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="selectedOrder" class="modal-backdrop">
+  <div class="modal-content p-4 bg-light rounded shadow-lg">
+    <h5>Order #{{ selectedOrder.orderId }} - {{ selectedOrder.customerName }}</h5>
+    <p><strong>Status:</strong> {{ selectedOrder.status }}</p>
+    <p><strong>Delivery Agent:</strong> {{ selectedOrder.deliveryAgentName }}</p>
+    <p><strong>Date:</strong> {{ selectedOrder.orderDateTime | date:'medium' }}</p>
+    <p><strong>Grand Total:</strong> ₹{{ selectedOrder.grandTotal }}</p>
+
+    <table class="table table-sm table-bordered mt-3 table-hover">
+      <thead class="table-secondary">
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of selectedOrder.orderedItems">
+          <td>{{ item.itemName }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>₹{{ item.price }}</td>
+          <td>₹{{ item.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-sm btn-danger mt-3" (click)="closeOrderDetails()">Close</button>
+  </div>
+</div>
+</div>
+
 </main>
 </div>
  

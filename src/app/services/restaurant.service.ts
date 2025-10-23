@@ -13,6 +13,33 @@ export interface RestaurantIDDto {
   tradeId?: string;
 }
 
+// restaurant-order-view.dto.ts
+export interface OrderedItemDto {
+  itemName: string;
+  quantity: number;
+  price: number;
+  total: number;
+}
+
+export interface RestaurantOrderViewDto {
+  orderId: number;
+  customerName: string;
+  orderedItems: OrderedItemDto[];
+  grandTotal: number;
+  orderDateTime: string;
+  status: string;
+  deliveryAgentName: string;
+}
+
+
+export class UpdateOrderStatusDto {
+  orderId!: number;
+  newStatus!: string;
+}
+
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,13 +54,47 @@ export class RestaurantService {
   }
 
   // ✅ Get restaurant profile by userId
- getRestaurantByUserId(userId: number): Observable<any> {
-  return this.http.get(`https://localhost:7004/api/Restaurant/getByUserId/${userId}`);
-}
+getRestaurantProfile(): Observable<RestaurantIDDto> {
+  const token = localStorage.getItem('authToken');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
 
+  return this.http.get<RestaurantIDDto>('https://localhost:7004/api/Restaurant/profile', { headers });
+}
 
   // ✅ Update restaurant profile
-  updateRestaurant(data: any): Observable<any> {
-  return this.http.put(`https://localhost:7004/api/Restaurant/restaurant/update`, data);
+  updateRestaurant(data: RestaurantIDDto): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  return this.http.put('https://localhost:7004/api/Restaurant/update', data, { headers });
 }
+
+
+
+
+ getOrdersForRestaurant(): Observable<RestaurantOrderViewDto[]> {
+    const token = localStorage.getItem('authToken');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+    return this.http.get<RestaurantOrderViewDto[]>('https://localhost:7004/api/Order/restaurant-orders', { headers });
+  }
+
+
+updateOrderStatus(dto: UpdateOrderStatusDto): Observable<any> {
+  const token = localStorage.getItem('authToken');
+
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+
+  return this.http.put('https://localhost:7004/api/Order/update-status', dto, { headers });
+}
+
+
 }

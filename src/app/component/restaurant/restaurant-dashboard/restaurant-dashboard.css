@@ -1,6 +1,229 @@
 .restaurant-dashboard {
   display: flex;
   height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fffaf5;
+}
+ 
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #fc8019, #ff944d);
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+}
+ 
+/* Profile */
+.profile-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: white;
+  padding: 5px;
+  object-fit: cover;
+  border: 2px solid #fff;
+  transition: transform 0.3s ease;
+}
+ 
+.profile-img:hover {
+  transform: scale(1.05);
+}
+ /* Logout button */
+.logout button {
+ border: none;
+ padding: 8px 20px;
+ border-radius: 20px;
+ transition: all 0.3s ease;
+}
+.logout button:hover {
+ background-color: #ffe0b2;
+}
+/* Navigation */
+.nav {
+  list-style: none;
+  padding: 0;
+}
+ 
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  border-radius: 30px;
+  margin: 5px 15px;
+  transition: all 0.3s ease;
+}
+ 
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+ 
+.nav-link.active {
+  background-color: #fff;
+  color: #fc8019;
+  font-weight: 600;
+}
+ 
+/* Icons */
+.nav-link i {
+  font-size: 18px;
+}
+ 
+/* Main Content */
+/* .main-content {
+  flex: 1;
+  margin-left: 250px;
+  background: #fff8f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+} */
+ /* --- MAIN CONTENT AREA --- */
+.main-content {
+  flex: 1;
+  margin-left: 250px;
+  background: #fff8f2;
+  padding: 2rem;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+ 
+/* Section Headings */
+.section-title {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+ 
+/* Swiggy orange text */
+.text-swiggy {
+  color: #fc8019;
+}
+ 
+/* Cards for restaurant/agent */
+.restaurant-card {
+  border: none;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+ 
+.restaurant-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(252, 128, 25, 0.15);
+}
+ 
+/* Images (FSSAI / Trade License) */
+.doc-img {
+  width: 90px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #fbe5d0;
+  transition: transform 0.3s ease;
+}
+ 
+.doc-img:hover {
+  transform: scale(1.05);
+}
+ 
+/* Buttons */
+.btn-swiggy {
+  background-color: #fc8019;
+  color: white;
+  font-weight: 600;
+  border-radius: 25px;
+  padding: 6px 18px;
+  transition: all 0.3s ease;
+}
+ 
+.btn-swiggy:hover {
+  background-color: #e66f00;
+  transform: scale(1.05);
+}
+ 
+/* Empty state illustration */
+.empty-state {
+  text-align: center;
+  padding: 3rem 0;
+  color: #777;
+}
+ 
+.empty-state img {
+  width: 120px;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+ 
+/* Blank screen welcome */
+.blank-space {
+  height: 100%;
+  padding: 4rem 2rem;
+  color: #666;
+}
+ 
+.welcome-img {
+  width: 140px;
+  opacity: 0.9;
+}
+ 
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 200px;
+  }
+  .doc-img {
+    width: 80px;
+    height: 60px;
+  }
+}
+ 
+@media (max-width: 576px) {
+  .main-content {
+    margin: 0;
+    padding: 1rem;
+  }
+}
+ 
+ 
+/* Blank area */
+.blank-space {
+  text-align: center;
+}
+ 
+.blank-space h3 {
+  color: #fc8019;
+  font-weight: 600;
+}
+ 
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  .main-content {
+    margin-left: 200px;
+  }
+}
+ 
+@media (max-width: 576px) {
+  .sidebar {
+    display: none;
+  }
+  .main-content {
+    margin: 0;
+  }
+}
+ 
+ 
+
+.restaurant-dashboard {
+  display: flex;
+  height: 100vh;
 }
 .sidebar {
   width: 220px;
@@ -169,4 +392,104 @@
 .modal-content .btn:hover {
     filter: brightness(110%);
     transform: translateY(-1px);
-} 
+}
+ 
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  max-width: 600px;
+  width: 90%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.filters {
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+
+.btn-swiggy {
+  background-color: #fc8019;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-swiggy:hover {
+  background-color: #e56b00;
+  color: white;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #fff3e0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.table-swiggy {
+  background-color: #fc8019;
+  color: white;
+}
+
+.table-swiggy th {
+  border-color: #f57c00;
+  font-weight: 600;
+}
+
+.btn-orange {
+  background-color: #ff6f00;
+  color: white;
+  border: none;
+}
+.btn-orange:hover {
+  background-color: #e65c00;
+}
+
+.text-orange {
+  color: #ff6f00;
+}
+
+.profile-icon {
+  width: 80px;
+  height: auto;
+}
+
+.update-card {
+  background-color: #fff;
+  max-width: 800px;
+  width: 100%;
+}
+
+.btn-orange {
+  background-color: #ff6f00;
+  color: white;
+  border: none;
+}
+.btn-orange:hover {
+  background-color: #e65c00;
+}

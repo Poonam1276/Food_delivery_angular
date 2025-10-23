@@ -1,24 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
-import { RestaurantService } from '../../../services/restaurant.service';
+import { RestaurantService, RestaurantIDDto, RestaurantOrderViewDto,UpdateOrderStatusDto} from '../../../services/restaurant.service';
 import { MenuItemService, MenuItemViewDto } from '../../../services/menuitem.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-restaurant-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, FormsModule ],
   templateUrl: './restaurant-dashboard.html',
   styleUrls: ['./restaurant-dashboard.css']
 })
 export class RestaurantDashboard implements OnInit {
-  selectedItem = 'Welcome';
+  selectedItem: string = '';
   menuItems = [
-    { label: 'Welcome', icon: 'bi bi-house' },
     { label: 'Profile', icon: 'bi bi-person' },
     { label: 'Manage Menu', icon: 'bi bi-list' },
-    { label: 'Logout', icon: 'bi bi-box-arrow-right' }
+    { label: 'View Orders', icon: 'bi bi-receipt' }
+  
   ];
 
   form!: FormGroup;
@@ -31,25 +33,45 @@ export class RestaurantDashboard implements OnInit {
   editingItem: MenuItemViewDto | null = null;
   isEditMode = false;
   foodImage?: File;
+ordersList: RestaurantOrderViewDto[] = [];
+selectedOrder: RestaurantOrderViewDto | null = null;
+ 
+filterStatus: string = '';
+filterDate: string = '';
+filterMonth: string = '';
+filterItemName: string = '';
+
+statusOptions: string[] = ['Order Placed', 'Preparing Order', 'Out for delivery', 'Delivered'];
+
+
+months = [
+  { label: 'January', value: '01' },
+  { label: 'February', value: '02' },
+  { label: 'March', value: '03' },
+  { label: 'April', value: '04' },
+  { label: 'May', value: '05' },
+  { label: 'June', value: '06' },
+  { label: 'July', value: '07' },
+  { label: 'August', value: '08' },
+  { label: 'September', value: '09' },
+  { label: 'October', value: '10' },
+  { label: 'November', value: '11' },
+  { label: 'December', value: '12' }
+];
+
+
 
   constructor(
+    private router: Router,
     private fb: FormBuilder,
     private restaurantService: RestaurantService,
     private menuItemService: MenuItemService
   ) {}
 
   ngOnInit(): void {
-    const userIdString = localStorage.getItem('userId');
-    if (!userIdString || isNaN(Number(userIdString))) {
-      this.message = 'User ID not found. Please login again.';
-      return;
-    }
-
-    const userId = Number(userIdString);
-
     this.form = this.fb.group({
       restaurantId: [0],
-      userId: [userId],
+      userId: [0],
       address: [''],
       fssaiId: [''],
       pinCode: [null],
@@ -66,10 +88,16 @@ export class RestaurantDashboard implements OnInit {
       category: ['']
     });
 
-    this.restaurantService.getRestaurantByUserId(userId).subscribe({
-      next: (data) => {
+    this.loadProfile();
+    this.loadOrders();
+  }
+
+    loadProfile(): void {
+    this.restaurantService.getRestaurantProfile().subscribe({
+      next: (data: RestaurantIDDto) => {
         this.form.patchValue({
           restaurantId: data.restaurantId,
+          userId: data.userId,
           address: data.address,
           fssaiId: data.fssaiId,
           pinCode: data.pinCode,
@@ -87,42 +115,29 @@ export class RestaurantDashboard implements OnInit {
   }
 
   selectMenu(label: string): void {
+    this.selectedItem = label;
+
     if (label === 'Logout') {
       localStorage.clear();
-      window.location.href = '/login';
-    } else {
-      this.selectedItem = label;
+      this.router.navigate(['/login']);
     }
-  }
 
-updateProfile(): void {
-  const restaurantId = this.form.get('restaurantId')?.value;
-
-  if (!restaurantId || restaurantId === 0) {
-    this.message = 'Invalid restaurant ID. Cannot update profile.';
-    return;
-  }
-
-  const dto = {
-    restaurantId: restaurantId,
-    userId: this.form.get('userId')?.value,
-    address: this.form.get('address')?.value,
-    fssaiId: this.form.get('fssaiId')?.value,
-    pinCode: this.form.get('pinCode')?.value,
-    tradeId: this.form.get('tradeId')?.value,
-    fssaiImage: this.form.get('fssaiImage')?.value,
-    tradelicenseImage: this.form.get('tradelicenseImage')?.value
-  };
-
-  this.restaurantService.updateRestaurant(dto).subscribe({
-    next: () => {
-      this.message = 'Profile updated successfully!';
-    },
-    error: () => {
-      this.message = 'Update failed. Please try again.';
+   
     }
-  });
-}
+  
+
+  updateProfile(): void {
+    const dto: RestaurantIDDto = this.form.value;
+
+    this.restaurantService.updateRestaurant(dto).subscribe({
+      next: () => {
+        this.message = 'Profile updated successfully!';
+      },
+      error: () => {
+        this.message = 'Update failed. Please try again.';
+      }
+    });
+  }
 
   loadMenuItems(): void {
     const restaurantId = this.form.get('restaurantId')?.value;
@@ -130,14 +145,103 @@ updateProfile(): void {
     this.menuItemService.getItemsByRestaurant(restaurantId).subscribe({
       next: (response: any) => {
         this.menuItemsList = Array.isArray(response.$values) ? response.$values : [];
-        console.log("Loaded menu items:", this.menuItemsList);
       },
       error: () => {
-        console.error("Failed to load menu items.");
         this.menuItemsList = [];
       }
     });
   }
+
+ 
+loadOrders(): void {
+  this.restaurantService.getOrdersForRestaurant().subscribe({
+    next: (response: any) => {
+      const rawOrders = Array.isArray(response.$values) ? response.$values : [];
+
+      // Transform orderedItems.$values into a plain array
+      this.ordersList = rawOrders.map((order: any) => ({
+        ...order,
+        orderedItems: Array.isArray(order.orderedItems?.$values)
+          ? order.orderedItems.$values
+          : []
+      }));
+    },
+    error: () => {
+      console.error('Failed to load orders.');
+    }
+  });
+}
+
+
+openOrderDetails(order: RestaurantOrderViewDto): void {
+  this.selectedOrder = order;
+}
+
+closeOrderDetails(): void {
+  this.selectedOrder = null;
+}
+
+
+
+get filteredOrders(): RestaurantOrderViewDto[] {
+  return this.ordersList.filter(order => {
+    const orderDate = new Date(order.orderDateTime);
+
+    const matchesStatus = this.filterStatus ? order.status === this.filterStatus : true;
+    const matchesDate = this.filterDate ? orderDate.toISOString().split('T')[0] === this.filterDate : true;
+    const matchesMonth = this.filterMonth ? (orderDate.getMonth() + 1).toString().padStart(2, '0') === this.filterMonth : true;
+    const matchesItem = this.filterItemName
+      ? order.orderedItems.some(item => item.itemName.toLowerCase().includes(this.filterItemName.toLowerCase()))
+      : true;
+      
+return matchesStatus && matchesDate && matchesMonth && matchesItem;
+  });
+}
+
+
+clearFilters(): void {
+  this.filterStatus = '';
+  this.filterDate = '';
+  this.filterMonth = '';
+  this.filterItemName = '';
+}
+
+get orderStats(): { totalOrders: number; totalQuantity: number } {
+  let totalOrders = this.filteredOrders.length;
+  let totalQuantity = 0;
+
+  if (this.filterItemName) {
+    this.filteredOrders.forEach(order => {
+      order.orderedItems.forEach(item => {
+        if (item.itemName.toLowerCase().includes(this.filterItemName.toLowerCase())) {
+          totalQuantity += item.quantity;
+        }
+      });
+    });
+  }
+
+  return { totalOrders, totalQuantity };
+}
+
+
+
+onStatusChange(order: RestaurantOrderViewDto, newStatus: string): void {
+  if (newStatus === order.status) return;
+
+  const dto: UpdateOrderStatusDto = {
+    orderId: order.orderId,
+    newStatus: newStatus
+  };
+
+  this.restaurantService.updateOrderStatus(dto).subscribe({
+    next: () => {
+      order.status = newStatus;
+    },
+    error: () => {
+      alert('Failed to update status. Please try again.');
+    }
+  });
+}
 
   resetModal(): void {
     this.showAddModal = false;
@@ -216,11 +320,25 @@ updateProfile(): void {
     });
   }
 
-  deleteItem(id: number): void {
-    if (confirm('Are you sure you want to delete this item?')) {
-      this.menuItemService.deleteItem(id).subscribe(() => {
-        this.loadMenuItems();
-      });
-    }
+  logout(): void {
+    localStorage.removeItem('authToken');
+    alert('You have been logged out successfully.');
+    this.router.navigate(['/login']);
   }
+
+  getImageUrl(path: string): string {
+  if (!path) return ''; // handle null or undefined
+ 
+  // If it's already a full URL, return as-is
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+ 
+  // Otherwise, assume it's a relative path from your backend
+  return 'https://localhost:7004' + path;
+}
+ 
+openImage(imageUrl: string): void {
+  window.open(imageUrl, '_blank');
+}
 }

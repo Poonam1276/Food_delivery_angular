@@ -23,7 +23,7 @@ export const routes: Routes = [
 
   { path: 'login', component: LoginComponent },
 { path: 'profilecompletion', component: ProfileCompletion },
-{ path: 'dashboard', component:  RestaurantDashboard },
+{ path: 'restaurant-dashboard', component:  RestaurantDashboard },
 
   { path: 'menu', component: MenuComponent },
  
