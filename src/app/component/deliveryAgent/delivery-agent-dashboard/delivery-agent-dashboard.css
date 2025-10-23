@@ -1,0 +1,47 @@
+.sidebar {
+  background: linear-gradient(180deg, #fc8019, #ff944d);
+  min-height: 100vh;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.profile img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.profile img:hover {
+  transform: scale(1.05);
+}
+
+.profile h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.btn-sidebar {
+  background: none;
+  color: white;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.btn-sidebar:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+.content {
+  background: #fff8f2;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    min-height: auto;
+  }
+}

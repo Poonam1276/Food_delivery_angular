@@ -1,0 +1,76 @@
+.container h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #fc8019;
+}
+.btn-outline-primary,
+.btn-outline-success {
+  font-weight: 500;
+  border-radius: 25px;
+  padding: 8px 20px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary.active,
+.btn-outline-success.active {
+  background-color: #fc8019;
+  color: white;
+  border-color: #fc8019;
+}
+.card {
+  border: none;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.btn-success {
+  border-radius: 20px;
+  font-size: 0.9rem;
+  padding: 6px 16px;
+}
+
+.alert-info {
+  font-size: 0.95rem;
+  border-radius: 8px;
+  background-color: #eaf6ff;
+  color: #31708f;
+  border: 1px solid #bce8f1;
+}
+
+@media (max-width: 576px) {
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+  }
+
+  .btn-outline-primary,
+  .btn-outline-success {
+    font-size: 0.85rem;
+    padding: 6px 14px;
+  }
+
+  .btn-success {
+    font-size: 0.85rem;
+    padding: 5px 12px;
+  }
+}
