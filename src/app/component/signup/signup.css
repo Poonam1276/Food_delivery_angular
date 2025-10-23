@@ -10,13 +10,14 @@
   flex: 1.2;
   overflow: hidden;
 }
- 
+
 .signup-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
  
+
 /* Right side form area */
 .signup-right {
   flex: 0.8;
@@ -79,3 +80,4 @@
   margin-bottom: 0.8rem !important;
 }
  
+

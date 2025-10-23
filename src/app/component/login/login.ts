@@ -5,10 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import {LoginService } from '../../services/login.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
- 
+
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
@@ -18,6 +17,7 @@ export class LoginComponent {
   otp: string = '';
   otpRequested: boolean = false;
   message: string = '';
+
   returnUrl: string = '/';
   constructor(private loginService: LoginService,
      private authService: AuthService,
@@ -31,7 +31,6 @@ ngOnInit() {
   this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/menu';
 }
  
- 
   requestOtp() {
     this.loginService.requestOtp(this.email).subscribe({
       next: (res: any) => {
@@ -40,6 +39,7 @@ ngOnInit() {
           ? res
           : res.message || 'OTP sent successfully.';
       },
+
      
 error: (err: any) => {
   console.error('OTP Request Error:', err);
@@ -53,7 +53,7 @@ error: (err: any) => {
   this.loginService.verifyOtp(this.email, this.otp).subscribe({
     next: (res: any) => {
       localStorage.setItem('authToken', res.token);
-      this.authService.login(res.token); // ✅ notify navbar
+      this.authService.login(res.token); 
       this.message = res.message || 'OTP verified successfully!';
  
       const role = res.role?.toLowerCase(); // assuming role is returned in response
@@ -71,7 +71,7 @@ error: (err: any) => {
           window.location.href = '/dashboard';
           break;
         case 'delivery agent':
-          window.location.href = '/delivery-dashboard';
+          window.location.href = '/delivery-agent/dashboard';
           break;
         default:
           this.message = 'Unknown role. Cannot redirect.';

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
- 
+
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -19,7 +19,7 @@ export class SignupComponent {
     phone: '',
     role: ''
   };
- 
+
   message: string = '';
  
   constructor(private authService: AuthService, private router: Router) {}
@@ -28,7 +28,6 @@ export class SignupComponent {
     next: (response) => {
       this.message = response.message || 'Registration successful!';
 
-      // ✅ Store userId for later use
       localStorage.setItem('userId', response.userId.toString());
 
       if (this.user.role === 'Restaurant') {
@@ -39,6 +38,14 @@ export class SignupComponent {
           }
         });
       }
+      if (this.user.role === 'DeliveryAgent') {
+          this.router.navigate(['/delivery-agent-details'], {
+            queryParams: {
+              name: this.user.name,
+              email: this.user.email
+            }
+          });
+        }
     },
     error: (error) => {
       if (error.status === 409) {
@@ -49,4 +56,5 @@ export class SignupComponent {
     }
   });
 }
+
 }

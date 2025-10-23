@@ -1,0 +1,63 @@
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">Your Orders</h2>
+
+  <div class="d-flex justify-content-center mb-4">
+    <button class="btn btn-outline-primary me-2" [class.active]="activeSection === 'pending'" (click)="activeSection = 'pending'">
+      Orders Yet to Deliver
+    </button>
+    <button class="btn btn-outline-success" [class.active]="activeSection === 'delivered'" (click)="activeSection = 'delivered'">
+      Delivered Orders
+    </button>
+  </div>
+
+  <div *ngIf="activeSection === 'pending'">
+    <h4 class="mb-3">Orders Yet to Deliver</h4>
+    <div *ngIf="ordersYetToDeliver.length > 0; else noPending">
+      <div class="row">
+        <div class="col-md-6 mb-4" *ngFor="let order of ordersYetToDeliver">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Order #{{ order.orderId }}</h5>
+              <p class="card-text">
+                <strong>Status:</strong> {{ order.status }}<br />
+                <strong>Customer:</strong> {{ order.customerName }}<br />
+                <strong>Address:</strong> {{ order.customerAddress }}<br />
+                <strong>Restaurant:</strong> {{ order.restaurantName }}
+              </p>
+              <button class="btn btn-success" (click)="markDelivered(order.orderId)">
+                Mark Delivered
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noPending>
+      <div class="alert alert-info">No pending orders.</div>
+    </ng-template>
+  </div>
+
+  <div *ngIf="activeSection === 'delivered'">
+    <h4 class="mb-3">Delivered Orders</h4>
+    <div *ngIf="deliveredOrders.length > 0; else noDelivered">
+      <div class="row">
+        <div class="col-md-6 mb-4" *ngFor="let order of deliveredOrders">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Order #{{ order.orderId }}</h5>
+              <p class="card-text">
+                <strong>Status:</strong> {{ order.status }}<br />
+                <strong>Customer:</strong> {{ order.customerName }}<br />
+                <strong>Address:</strong> {{ order.customerAddress }}<br />
+                <strong>Restaurant:</strong> {{ order.restaurantName }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noDelivered>
+      <div class="alert alert-info">No delivered orders yet.</div>
+    </ng-template>
+  </div>
+</div>
