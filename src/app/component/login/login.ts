@@ -70,7 +70,7 @@ error: (err: any) => {
         case 'restaurant':
           window.location.href = '/dashboard';
           break;
-        case 'delivery agent':
+        case 'deliveryagent':
           window.location.href = '/delivery-agent/dashboard';
           break;
         default:
