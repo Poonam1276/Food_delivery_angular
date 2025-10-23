@@ -11,6 +11,7 @@ export interface Restaurant {
   phone: string;
   isVerified: boolean;
   role: string;
+
   submittedRestaurants: submittedRestaurants[];
 }
 
@@ -21,6 +22,8 @@ export interface submittedRestaurants{
   fssaiImage: string;
   tradelicenseImage: string;
   tradeId: string;
+  orderCount:number;
+
 }
 export interface DeliveryAgent {
   userId: number;

@@ -126,8 +126,14 @@ openImage(imageUrl: string): void {
       // this.unverifiedRestaurants = data.$values || [];
       this.unverifiedRestaurants = (data.$values || []).map((restaurant: any) => ({
   ...restaurant,
-  submittedRestaurants: restaurant.submittedRestaurants?.$values || []
+  submittedRestaurants: restaurant.submittedRestaurants?.$values || [],
 }));
+this.unverifiedRestaurants.sort((a: any, b: any) => {
+        // Assuming each restaurant has at least one submittedRestaurant
+        const aCount = a.submittedRestaurants?.[0]?.orderCount || 0;
+        const bCount = b.submittedRestaurants?.[0]?.orderCount || 0;
+        return bCount - aCount; // ascending order (lowest first)
+      });
       this.loading = false;
     },
     error: (err:any) => {
