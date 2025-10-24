@@ -5,7 +5,7 @@
     <div class="profile text-center mb-4">
       <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin Profile" class="profile-img mb-2" />
       <h5 class="text-white fw-semibold mb-0">Admin Panel</h5>
-      <small class="text-light">PRIYA</small>
+      <small class="text-light">POONAM</small>
     </div>
 
     <!-- Navigation -->
@@ -182,6 +182,9 @@
     /> -->
       <h3 class="text-swiggy fw-bold">Welcome to the Admin Dashboard 👋</h3>
       <p>Select an option from the sidebar to get started.</p>
+    </div>
+    <div  *ngIf="selectedItem === 'See Graph'" class="content-section">
+      <app-top-restaurants-chart></app-top-restaurants-chart>
     </div>
   </main>
 

@@ -7,6 +7,7 @@ import { routes } from './app.routes'; // ✅ Correct import
 import { FormsModule } from '@angular/forms';
 import { tokenInterceptor } from './token-interceptor';
 
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),

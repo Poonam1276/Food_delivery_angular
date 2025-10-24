@@ -8,7 +8,7 @@
       /><h5 class="text-white fw-semibold mb-0">Food Zyaka</h5>
         </div>
       <!-- <small class="text-light fw-bold">FoodZyaka</small> -->
-  
+ 
  
     <ul class="nav flex-column w-100">
       <li class="nav-item" *ngFor="let item of menuItems">
@@ -75,14 +75,14 @@
     </form>
   </div>
 </div>
-
+ 
     <!-- <p class="text-success mt-3 text-center">{{ message }}</p> -->
   </div>
 </div>
  <div *ngIf="selectedItem === 'Manage Menu'" class="content-section">
   <h3 class="section-title mb-4 text-swiggy">🍽️ Manage Menu</h3>
   <button class="btn btn-sm btn-warning mb-3" (click)="openAddModal()">Add Menu Item</button>
-
+ 
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -110,7 +110,7 @@
     style="cursor: pointer; max-width: 100px; object-fit: cover;"
   />
 </td>
-        
+       
         <td>
           <button class="btn btn-sm btn-warning me-2" (click)="editItem(item)">Edit</button>
           <!-- <button class="btn btn-sm btn-danger" (click)="deleteItem(item.itemId)">Delete</button> -->
@@ -118,7 +118,7 @@
       </tr>
     </tbody>
   </table>
-
+ 
   <div *ngIf="showAddModal" class="modal-backdrop">
     <div class="modal-content p-4 bg-light rounded">
       <h5>{{ isEditMode ? 'Edit Menu Item' : 'Add Menu Item' }}</h5>
@@ -145,13 +145,13 @@
           <label>Available:</label>
           <input formControlName="isAvailable" type="checkbox" />
         </div>
-
+ 
         <!-- Show file input only in Add mode -->
         <div class="mb-3" *ngIf="!isEditMode">
           <label>Food Image:</label>
           <input type="file" (change)="onFileChange($event)" class="form-control" />
         </div>
-
+ 
         <button type="submit" class="btn btn-sm btn-warning me-2">
           {{ isEditMode ? 'Update' : 'Add' }}
         </button>
@@ -165,28 +165,28 @@
   <select class="form-select w-auto" [(ngModel)]="filterStatus">
     <option value="">All Statuses</option>
     <option value="Order Placed">Order Placed</option>
-    <option value="Preparing Order">Preparing Order</option>
-    <option value="Out for delivery">Out for delivery</option>
+    <option value="Preparing">Preparing</option>
+    <option value="Out for Delivery">Out for Delivery</option>
     <option value="Delivered">Delivered</option>
   </select>
-
+ 
   <input type="date" class="form-control w-auto" [(ngModel)]="filterDate" />
-
+ 
   <select class="form-select w-auto" [(ngModel)]="filterMonth">
     <option value="">All Months</option>
     <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
   </select>
-
+ 
   <input type="text" class="form-control w-auto" placeholder="Search Menu Item" [(ngModel)]="filterItemName" />
-
+ 
 <button class="btn btn-swiggy mt-3" (click)="clearFilters()">Clear Filters</button>
 </div>
-
+ 
 <div class="mb-3">
   <p class="fw-semibold text-dark mb-1">Total Orders: {{ orderStats.totalOrders }}</p>
   <p *ngIf="filterItemName" class="fw-semibold text-dark">Total Quantity of "{{ filterItemName }}": {{ orderStats.totalQuantity }}</p>
 </div>
-
+ 
 <table class="table table-bordered table-hover shadow-sm">
   <thead class="table-swiggy">
     <tr>
@@ -202,13 +202,12 @@
       <td>{{ order.customerName }}</td>
       <td>
         <select
-  class="form-select form-select-sm w-auto"
-  [(ngModel)]="order.status"
-  (ngModelChange)="onStatusChange(order, order.status)"
->
-  <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
-</select>
-
+          class="form-select form-select-sm w-auto"
+          [ngModel]="order.status"
+          (ngModelChange)="onStatusChange(order, $event)"
+        >
+          <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+        </select>
       </td>
       <td>
         <button class="btn btn-sm btn-swiggy" (click)="openOrderDetails(order)">View Details</button>
@@ -216,7 +215,7 @@
     </tr>
   </tbody>
 </table>
-
+ 
 <div *ngIf="selectedOrder" class="modal-backdrop">
   <div class="modal-content p-4 bg-light rounded shadow-lg">
     <h5>Order #{{ selectedOrder.orderId }} - {{ selectedOrder.customerName }}</h5>
@@ -224,7 +223,7 @@
     <p><strong>Delivery Agent:</strong> {{ selectedOrder.deliveryAgentName }}</p>
     <p><strong>Date:</strong> {{ selectedOrder.orderDateTime | date:'medium' }}</p>
     <p><strong>Grand Total:</strong> ₹{{ selectedOrder.grandTotal }}</p>
-
+ 
     <table class="table table-sm table-bordered mt-3 table-hover">
       <thead class="table-secondary">
         <tr>
@@ -243,13 +242,15 @@
         </tr>
       </tbody>
     </table>
-
+ 
     <button class="btn btn-sm btn-danger mt-3" (click)="closeOrderDetails()">Close</button>
   </div>
 </div>
 </div>
-
+ 
 </main>
 </div>
+ 
+ 
  
  

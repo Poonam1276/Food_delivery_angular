@@ -35,7 +35,11 @@ export interface DeliveryAgent {
   address: string;
   documentUrl: string;
 }
-
+export interface TopRestaurant {
+  name: string;
+  orderCount: number;
+  totalEarnings: number;
+}
 
 
 @Injectable({
@@ -62,4 +66,12 @@ export class AdminService {
   getAllrestaurant(): Observable<Restaurant[]> {
   return this.http.get<Restaurant[]>('https://localhost:7004/api/Restaurant/getAllrestaurants');
 }
+// getTopRestaurants(topCount: number = 5): Observable<TopRestaurant[]> {
+//     return this.http.get<TopRestaurant[]>(`https://localhost:7004/api/Restaurant/top-restaurants?topCount`);
+//   }
+
+getTopRestaurants(topCount: number = 5): Observable<TopRestaurant[]> {
+  return this.http.get<TopRestaurant[]>(`https://localhost:7004/api/Restaurant/top-restaurants?topCount=${topCount}`);
+}
+
 }

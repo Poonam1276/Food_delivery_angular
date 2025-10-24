@@ -4,16 +4,18 @@ import { CommonModule } from '@angular/common';
 import { AdminService, Restaurant, DeliveryAgent } from '../../services/admin';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import {TopRestaurantsChartComponent} from '../top-restaurants-chart/top-restaurants-chart';
 
 @Component({
   selector: 'app-admin-dasboard',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,TopRestaurantsChartComponent],
   templateUrl: './admin-dasboard.html',
   styleUrls: ['./admin-dasboard.css']
 })
 export class AdminDasboard implements OnInit {
   selectedItem: string = '';
+   showGraph = false;
 
   menuItems = [
     { label: 'Verify Restaurant', icon: 'bi bi-check2-square' },
@@ -45,6 +47,9 @@ export class AdminDasboard implements OnInit {
   }
   else if(label === 'See All Restaurants'){
     this.loadAllRestaurants();
+  }
+  else if (label === 'See Graph'){
+    this.openTopGraph();
   }
 }
 
@@ -164,4 +169,13 @@ this.unverifiedRestaurants.sort((a: any, b: any) => {
    alert('You have been logged out successfully.');
    this.router.navigate(['/login']);
  }
+
+ openTopGraph() {
+    this.showGraph = !this.showGraph;
+    // optionally scroll to the chart area:
+    setTimeout(() => {
+      const el = document.querySelector('app-top-restaurants-chart');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
 }

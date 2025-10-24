@@ -1,0 +1,15 @@
+.chart-card {
+  background-color: #fffaf4;
+  border-radius: 10px;
+}
+ 
+.text-swiggy {
+  color: #FC8019;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+}
+ 
+canvas {
+  width: 100% !important;
+  height: 360px !important;
+}
